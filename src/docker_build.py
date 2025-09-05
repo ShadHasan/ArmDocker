@@ -13,8 +13,30 @@ config = {
 		"job": {
 			"build": "build -t {{variable.image_name}} .",
 			"run": "run --name={{variable.container_name}} {{variable.image_name}}",
-			"exec": "exec -t {{variable.container_name}} bach -c '{{cmd}}'"
+			"exec": "exec -t {{variable.container_name}} bach -c '{{cmd}}'",
+			"interactive_run": "run -it --name={{variable.container_name}} {{variable.image_name}} bash"
+		},
+		"reference": {
+			"source code": "https://github.com/OpenMathLib/OpenBLAS",
+			"blas api doc": [
+				"https://www.netlib.org/blas/",
+				"https://www.netlib.org/blas/blas.pdf"
+			],
+			"abbreviation": "Basic Linear Algebra Subprogram"
+		},
+		"post_manual_activity": {
+			"reference": "http://www.openmathlib.org/OpenBLAS/docs/user_manual/",
+			"compile" : [
+					"Go to operblas clone directory",
+					"RUN 'make' command"
+				}
 		}
+	},
+	"mlpack": {
+	},
+	"lapack": {
+	},
+	"armadillo": {
 	}
 }
 
@@ -50,5 +72,6 @@ if __name__ == "__main__":
 		cmd = Template(config[component]["job"]["build"]).render(variable=config[component]["variable"])
 		path = config[component]["variable"]["docker_path"]
 		print("Command to be executed: ", cmd)
+		docker_executor(cmd, path)
 	
 	
