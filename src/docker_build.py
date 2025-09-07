@@ -17,33 +17,13 @@ config = {
         "job": {
             "build": "build -t {{variable.image_name}} .",
             "run": "run --name={{variable.container_name}} {{variable.image_name}}",
-            "exec": "exec -t {{variable.container_name}} bach -c '{{cmd}}'",
+            "exec": "exec -t {{variable.container_name}} bash -c '{{cmd}}'",
             "interactive_run": "run -it --name={{variable.container_name}} {{variable.image_name}} bash",
             "tests": [
-            	{
-            		"name": "",
-            		"steps": [
-            			"cd /opt/test_openblass",
-            			"gcc -o test_cblas_open test_cblas_dgemm.c -I/opt/OpenBLAS/include/ -L/opt/OpenBLAS/lib -Wl,-rpath,/opt/OpenBLAS/lib -lopenblas -lpthread -lgfortran",
-            			"./test_cblas_open"
-            		],
-            		"reference": [
-            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#call-cblas-interface",
-            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#linking-to-openblas"
-            		],
-            		"Notes": "You may not required to link gfortran library if openblas.pc ie package config already linked to gfortran library"
-            	},
-            	{
-            		"name": "",
-            		"steps": [
-            			"cd /opt/test_openblass",
-            			"gcc -o time_dgemm time_dgemm.c /opt/OpenBLAS/lib/libopenblas.a -lpthread -lm",
-            			"./time_dgemm 4 5 7"
-            		],
-            		"reference": [
-            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#call-blas-fortran-interface"
-            		]
-            	}
+            	"exec -t {{variable.container_name}} bash -c 'cd /opt/test_openblass;gcc -o test_cblas_open test_cblas_dgemm.c -I/opt/OpenBLAS/include/ -L/opt/OpenBLAS/lib -Wl,-rpath,/opt/OpenBLAS/lib -lopenblas -lpthread -lgfortran;'",
+            	"exec -t {{variable.container_name}} bash -c 'cd /opt/test_openblass;./test_cblas_open;'",
+            	"exec -t {{variable.container_name}} bash -c 'cd /opt/test_openblass;gcc -o time_dgemm time_dgemm.c /opt/OpenBLAS/lib/libopenblas.a -lpthread -lm;'",
+            	"exec -t {{variable.container_name}} bash -c 'cd /opt/test_openblass;./test_cblas_open;./time_dgemm 4 5 7'"
             ]
         },
         "reference": {
@@ -64,6 +44,30 @@ config = {
             	"RUN 'make install' for default directory else 'make install PREFIX=<other directory>'"
             ],
             "tests": [
+            	{
+            		"name": "Call CBLAS interface",
+            		"steps": [
+            			"cd /opt/test_openblass",
+            			"gcc -o test_cblas_open test_cblas_dgemm.c -I/opt/OpenBLAS/include/ -L/opt/OpenBLAS/lib -Wl,-rpath,/opt/OpenBLAS/lib -lopenblas -lpthread -lgfortran",
+            			"./test_cblas_open"
+            		],
+            		"reference": [
+            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#call-cblas-interface",
+            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#linking-to-openblas"
+            		],
+            		"Notes": "You may not required to link gfortran library if openblas.pc ie package config already linked to gfortran library"
+            	},
+            	{
+            		"name": "Call BLAS Fortran interface",
+            		"steps": [
+            			"cd /opt/test_openblass",
+            			"gcc -o time_dgemm time_dgemm.c /opt/OpenBLAS/lib/libopenblas.a -lpthread -lm",
+            			"./time_dgemm 4 5 7"
+            		],
+            		"reference": [
+            			"http://www.openmathlib.org/OpenBLAS/docs/user_manual/#call-blas-fortran-interface"
+            		]
+            	}
             ],
             "troubleshooting": [
             	{
