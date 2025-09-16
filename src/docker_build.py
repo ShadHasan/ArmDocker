@@ -3,7 +3,50 @@ import os
 import subprocess
 from jinja2 import Template
 
+platform = {
+	"devices": [
+		{
+			"orangepipro5": {
+				"architecture": "",
+				"user_oses": {},
+				"cpu": {
+					"supported library": [	
+					],
+					"utilized_and_tested": [
+					]
+				},
+				"gpu": {
+					"supported library": {
+						"opencl": {
+							"version": "2.1"
+						},
+						"vulkan": {},
+						"opencv": {}
+					]
+				}
+			} 
+		},
+		{
+		}
+	]
+}
+
 config = {
+	"build-essential": {
+		"contains": {
+			"GCC": "The GNU Compiler Collection for compiling C programs.",
+			"G++": "The GNU Compiler for compiling C++ programs.",
+			"libc6-dev": "Development libraries and header files for the GNU C library.",
+			"make": "A utility for directing the compilation process using makefiles.",
+			"dpkg-dev": "Tools for building Debian packages from source code."
+		},
+		"description": "It is a meta-package in Ubuntu that includes essential tools for compiling software, primarily written in C and C++",
+		"variable": {
+            "docker_path": "build_essential",
+            "image_name": "tinyorb/arm64v8_buildessential",
+            "container_name": "buildessential"
+        }
+	},
     "openblas": {
         "description": "It is basic linear algebra subprogram which provided matrix and vector.The Level 1 BLAS ",
         "description2": "perform scalar, vector and vector-vector operations, the Level 2 BLAS perform matrix-vector ",
@@ -11,7 +54,7 @@ config = {
         "description4": "CBLAS (now part of LAPACK release)",
         "variable": {
             "docker_path": "openblas",
-            "image_name": "tinyorb/openblas",
+            "image_name": "tinyorb/arm64v8_openblas",
             "container_name": "openblas"
         },
         "job": {
@@ -32,13 +75,16 @@ config = {
                 "https://www.netlib.org/blas/",
                 "https://www.netlib.org/blas/blas.pdf"
             ],
-            "abbreviation": "Basic Linear Algebra Subprogram"
+            "abbreviation": "Basic Linear Algebra Subprogram",
+            "exercise material": "https://netlib.org/math/docpdf/",
+            "header file": "https://www.netlib.org/blas/cblas.h"
         },
         "post_manual_activity": {
             "reference": "http://www.openmathlib.org/OpenBLAS/docs/user_manual/",
             "compile": [
                 "Go to operblas clone directory",
-                "RUN 'make' command"
+                "RUN 'make' command",
+                "Note: '-j4' is to allocate processor to utilize for number of processor. By default it pickup from TargetList.txt. OrangePiPro5 ARMV8"
             ],
             "install": [
             	"RUN 'make install' for default directory else 'make install PREFIX=<other directory>'"
@@ -108,6 +154,7 @@ config = {
     "armadillo": {},
     "DockerGPUAccelarated": {
         "reference": {
+        	"paper published": "https://arma.sourceforge.net/armadillo_iccae_2025.pdf",
             "milas_blog": "https://milas.dev/blog/mali-g610-rk3588-mlc-llm-docker/",
             "source_code": "https://github.com/milas/rock5-toolchain/blob/eef8c4833bfec4979785f6b3cc84a82e25ef50e9/extra/mlc-llm/Dockerfile"
         }
