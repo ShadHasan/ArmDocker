@@ -148,10 +148,28 @@ config = {
     },
     "lapack": {
         "description": "It is library written on top blas. lapack use blas core as well fortran library.",
-        "source_code": "https://github.com/Reference-LAPACK/lapack/tree/v3.12.1",
-        "reference": {}
+        "details1": "LAPACK is a library of Fortran 77 subroutines for solving the most commonly occurring problems in",
+        "details2": "numerical linear algebra. It has been designed to be efficient on a wide range of modern high-performance computers.",
+        "details3": "The name LAPACK is an acronym for Linear Algebra PACKage."
+        "reference": {
+        	"source_code": "https://github.com/Reference-LAPACK/lapack/tree/v3.12.1",
+        	"documentation": "https://www.netlib.org/lapack/lug/lapack_lug.html",
+        	"definition": "https://www.netlib.org/lapack/lug/node7.html"
+        }
     },
-    "armadillo": {},
+    "armadillo": {
+    	"reference": {
+    		"source code": "https://gitlab.com/conradsnicta/armadillo-code/-/tree/15.0.x",
+    		"armadillo linking with other libraries": "https://arma.sourceforge.net/docs.html#config.hpp"
+    	},
+    	"post_manual_activity": {
+    		"install": [
+    			"Copy armadillo header and library from 'https://gitlab.com/conradsnicta/armadillo-code/-/tree/15.0.x/include' to your include place",
+    			"Create armadillo based cpp program i.e. armadillo.cpp",
+    			"RUN  g++ <armadillo based cpp program> -o output -O2 -std=c++14 -I /opt/OpenBLAS/include/ -L/opt/OpenBLAS/lib -Wl,-rpath,/opt/OpenBLAS/lib -lopenblas"
+    		]
+    	}
+    },
     "DockerGPUAccelarated": {
         "reference": {
         	"paper published": "https://arma.sourceforge.net/armadillo_iccae_2025.pdf",
