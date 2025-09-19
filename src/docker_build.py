@@ -31,6 +31,15 @@ platform = {
 	]
 }
 
+machine_learning_stack = {
+	"Armadillo_EigenLibraries": {
+		"reference": "https://codezup.com/c-machine-learning-armadillo-eigen/"
+	},
+	"mlpack": {
+		"reference": "https://mlpack.org/doc/quickstart/cpp.html"
+	}
+}
+
 config = {
 	"build-essential": {
 		"contains": {
@@ -154,13 +163,15 @@ config = {
         "reference": {
         	"source_code": "https://github.com/Reference-LAPACK/lapack/tree/v3.12.1",
         	"documentation": "https://www.netlib.org/lapack/lug/lapack_lug.html",
-        	"definition": "https://www.netlib.org/lapack/lug/node7.html"
+        	"definition": "https://www.netlib.org/lapack/lug/node7.html",
+        	"C interface": "https://www.netlib.org/lapack/lapacke.html"
         }
     },
     "armadillo": {
     	"reference": {
     		"source code": "https://gitlab.com/conradsnicta/armadillo-code/-/tree/15.0.x",
-    		"armadillo linking with other libraries": "https://arma.sourceforge.net/docs.html#config.hpp"
+    		"armadillo linking with other libraries": "https://arma.sourceforge.net/docs.html#config.hpp",
+    		"matlab equivalent": "https://arma.sourceforge.net/docs.html#syntax"
     	},
     	"post_manual_activity": {
     		"install": [
@@ -168,7 +179,22 @@ config = {
     			"Create armadillo based cpp program i.e. armadillo.cpp",
     			"RUN  g++ <armadillo based cpp program> -o output -O2 -std=c++14 -I /opt/OpenBLAS/include/ -L/opt/OpenBLAS/lib -Wl,-rpath,/opt/OpenBLAS/lib -lopenblas"
     		]
-    	}
+    	},
+    	"dependencies": [
+    		"g++ c plus plus compiler"
+    	],
+    	"adds_on": [
+    		"blas",
+    		"lapack",
+    		"accelarate_framework",
+    		"SuperLU"
+    	]
+    },
+    "eigen": {
+    	"reference": {
+    		"documentation": "https://libeigen.gitlab.io/eigen/docs-nightly/index.html"
+    	},
+    	"source_code": ""
     },
     "DockerGPUAccelarated": {
         "reference": {
