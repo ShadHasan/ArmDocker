@@ -36,7 +36,16 @@ machine_learning_stack = {
 		"reference": "https://codezup.com/c-machine-learning-armadillo-eigen/"
 	},
 	"mlpack": {
-		"reference": "https://mlpack.org/doc/quickstart/cpp.html"
+		"reference": "https://mlpack.org/doc/quickstart/cpp.html",
+		"stacks": [
+			"build-essential",
+			"C++17 compiler",
+        	"Armadillo",
+        	"ensmallen",
+        	"cereal",
+        	"openblas",
+        	"openmp"
+		]
 	}
 }
 
@@ -153,7 +162,13 @@ config = {
                 "https://mlpack.org/doc/citation.html"
             ],
             "main documentation": "https://mlpack.org/doc/index.html"
-        }
+        },
+        "dependencies": [
+        	"C++17 compiler",
+        	"Armadillo >= 10.8",
+        	"ensmallen >= 2.10.0",
+        	"cereal >= 1.1.2"
+        ]
     },
     "lapack": {
         "description": "It is library written on top blas. lapack use blas core as well fortran library.",
@@ -194,7 +209,7 @@ config = {
     	"reference": {
     		"documentation": "https://libeigen.gitlab.io/eigen/docs-nightly/index.html"
     	},
-    	"source_code": ""
+    	"source_code": "https://gitlab.com/libeigen/eigen/-/tree/master?ref_type=heads"
     },
     "DockerGPUAccelarated": {
         "reference": {
@@ -213,6 +228,8 @@ config = {
     "eole": {
         "description": "Open language modeling toolkit based on PyTorch",
         "main page": "https://eole-nlp.github.io/eole/"
+    },
+    "ensmallen": {
     }
 }
 
