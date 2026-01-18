@@ -22,7 +22,7 @@ platform = {
 						},
 						"vulkan": {},
 						"opencv": {}
-					]
+					}
 				}
 			} 
 		},
