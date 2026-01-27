@@ -87,6 +87,10 @@ config = {
             	"exec -t {{variable.container_name}} bash -c 'cd /opt/test_openblass;./test_cblas_open;./time_dgemm 4 5 7'"
             ]
         },
+        "adds_on": [
+        	"apt install gfortran",
+        	""
+        ],
         "reference": {
             "source code": "https://github.com/OpenMathLib/OpenBLAS",
             "blas api doc": [
@@ -174,7 +178,7 @@ config = {
         "description": "It is library written on top blas. lapack use blas core as well fortran library.",
         "details1": "LAPACK is a library of Fortran 77 subroutines for solving the most commonly occurring problems in",
         "details2": "numerical linear algebra. It has been designed to be efficient on a wide range of modern high-performance computers.",
-        "details3": "The name LAPACK is an acronym for Linear Algebra PACKage."
+        "details3": "The name LAPACK is an acronym for Linear Algebra PACKage.",
         "reference": {
         	"source_code": "https://github.com/Reference-LAPACK/lapack/tree/v3.12.1",
         	"documentation": "https://www.netlib.org/lapack/lug/lapack_lug.html",
@@ -203,7 +207,16 @@ config = {
     		"lapack",
     		"accelarate_framework",
     		"SuperLU"
-    	]
+    	],
+    	"tips": [
+    		"1": "May armadillo in system default /usr/include or other path. But simply in OpenBlas installation directory in include. So check once like /opt/OpenBLAS/include.",
+    		"2": {
+    				"description": "Command to look for default directory",
+    				"g++": "echo | g++ -xc++ -E -v -",
+    				"c++": "echo | gcc -xc++ -E -v -",
+    				"c": "echo | gcc -xc -E -v -"
+    			}
+    	}
     },
     "eigen": {
     	"reference": {
@@ -265,6 +278,6 @@ if __name__ == "__main__":
 		cmd = Template(config[component]["job"]["build"]).render(variable=config[component]["variable"])
 		path = config[component]["variable"]["docker_path"]
 		print("Command to be executed: ", cmd)
-		# docker_executor(cmd, path)
+		docker_executor(cmd, path)
 	
 	
