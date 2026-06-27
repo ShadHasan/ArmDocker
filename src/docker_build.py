@@ -230,15 +230,28 @@ config = {
             "milas_blog": "https://milas.dev/blog/mali-g610-rk3588-mlc-llm-docker/",
             "source_code": "https://github.com/milas/rock5-toolchain/blob/eef8c4833bfec4979785f6b3cc84a82e25ef50e9/extra/mlc-llm/Dockerfile"
         },
+		"tools":[
+			"g++",
+			"pkg-config"
+		],
+		"ENV": [
+			"LD_LIBRARY_PATH"
+		]
 		"system_info":{
-			"quick_check_command": "lshw -short",
+			"quick_hw_command": "lshw -short",
 			"os": "DISTRIB_ID=Ubuntu \r\nDISTRIB_RELEASE=24.04 \r\nDISTRIB_CODENAME=noble \r\nDISTRIB_DESCRIPTION=Ubuntu 24.04.1 LTS",
-			"device": "Prange Pi 5 Pro"
+			"device": "Prange Pi 5 Pro",
+			"MonitorGPULoad": "watch -n 1 cat /sys/devices/platform/*.gpu/devfreq/*.gpu/load"
 			},
-		"Exploration": {
+		"ExplorationAndTest": {
 			"1": "Build base docker images from aarch64 ubuntu noble with build-essential kit.",
-			"2": "Start container with command, ``",
-			"3": ""
+			"2": "Copy wayland driver and etc.",
+			"Compilation and Installation of library": "",
+			"3": "Start container with command, `sudo docker run -it     --name=temp     --device /dev/mali0:/dev/mali0     -v /lib/firmware/mali_csffw.bin:/lib/firmware/mali_csffw.bin:ro     -v /usr/lib/aarch64-linux-gnu/libmali.so:/usr/lib/libmali.so:ro     opencv4_exploration /bin/bash`",
+			"": "apt install clinfo mesa-opencl-icd ocl-icd-opencl-dev libxcb-dri2-0 libxcb-dri3-0 libwayland-client0 libwayland-server0 libx11-xcb1 -y",
+			"4": "rm /etc/OpenCL/vendors/rusticl.icd  (Please delete this file, it creates confusion)",
+			"4": "Test by execute code like this: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/; \r\n g++ load_image_matrix.cpp -o output $(pkg-config opencv4 --libs --cflags); \r\n ./output`",
+			"5": "Monitor GPU Load for spike."
 		},
 		"doubts": {
 			"mali.icd vs mali-arm64.icd": "Both mali.icd and mali-arm64.icd are configuration files used by the OpenCL Installable Client Driver (ICD) Loader. They tell your system (typically Linux on ARM) where to find the proprietary libmali library needed to enable GPU-accelerated computing.The Core Differences \r\n mali.icd: The generic, traditional ICD configuration name used by most ARM Linux distributions (like Ubuntu, Debian, or Armbian) on aarch64. \r\n mali-arm64.icd: A specifically named ICD file often utilized in customized distributions (such as specific Rockchip builds or containerized environments like Frigate) to explicitly designate the 64-bit architecture. \r\n Contents of the Files \r\n Inside both .icd files, you will find a simple text string pointing to the exact location of your .so driver file.For example:`/usr/lib/aarch64-linux-gnu/libmali.so`(Note: The exact library name inside the file depends on your specific Mali DDK version, such as `libmali-valhall-g610-g6p0-x11-gbm.so`). \r\n Which one should you use? \r\n Use mali.icd if: You are following standard, community-supported setup guides. It is the most universally recognized name by standard OpenCL utilities like clinfo.\r\n Use mali-arm64.icd if: You are working with a vendor-provided or containerized image (e.g., custom Frigate/Rockchip configurations) where the system expects this exact filename to register the 64-bit GPU properly. \r\n In either case, you can generally verify that your OpenCL stack is working correctly and reading the .icd file by installing and running clinfo."

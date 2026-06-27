@@ -1,0 +1,81 @@
+
+
+### dev_kit firmware
+
+FROM arm64v8/ubuntu:noble
+RUN apt update -y
+RUN apt install -y git build-essential cmake make
+
+Note: we haven't used any build tool in below exploration
+
+### Run docker mounting `firmware` and `libmali` and `mali device `
+
+sudo docker run -it --rm \
+    --name="temp" \
+    --device /dev/mali0:/dev/mali0 \
+    -v /lib/firmware/mali_csffw.bin:/lib/firmware/mali_csffw.bin:ro \
+    -v /usr/lib/aarch64-linux-gnu/libmali.so:/usr/lib/libmali.so:ro \
+    dev_kit /bin/bash
+
+sudo docker run -it \
+    --name="temp" \
+    --device /dev/mali0:/dev/mali0 \
+    -v /lib/firmware/mali_csffw.bin:/lib/firmware/mali_csffw.bin:ro \
+    -v /usr/lib/aarch64-linux-gnu/libmali.so:/usr/lib/libmali.so:ro \
+    dev_kit /bin/bash
+
+### Copy from Host
+
+ubuntu@ubuntu:~$ sudo docker cp /usr/lib/libmali-valhall-g610-g6p0-x11-wayland-gbm.so temp:/usr/lib/libmali-valhall-g610-g6p0-x11-wayland-gbm.so
+Successfully copied 57.2MB to temp:/usr/lib/libmali-valhall-g610-g6p0-x11-wayland-gbm.so
+
+ubuntu@ubuntu:~$ cd /etc/OpenCL/vendors/
+ubuntu@ubuntu:/etc/OpenCL/vendors$ ls
+mali-arm64.icd  mali.icd
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$ cat mali-arm64.icd
+/usr/lib/aarch64-linux-gnu/libmali-x11/libmali-valhall-g610-g13p0-x11-wayland-gbm.so
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$ cat mali.icd
+/usr/lib/libmali-valhall-g610-g6p0-x11-wayland-gbm.so
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$ ls /usr/lib/aarch64-linux-gnu/libmali-x11/
+libEGL.so    libGLESv2.so    libOpenCL.so.1  libmali-valhall-g610-g13p0-x11-wayland-gbm.so
+libEGL.so.1  libGLESv2.so.2  libgbm.so.1
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$ sudo docker cp /usr/lib/aarch64-linux-gnu/libmali-x11/ temp:/usr/lib/aarch64-linux-gnu/libmali-x11/
+Successfully copied 43.4MB to temp:/usr/lib/aarch64-linux-gnu/libmali-x11/
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$ sudo docker cp /etc/OpenCL/vendors/mali-arm64.icd temp:/etc/OpenCL/vendors/mali-arm64.icd
+Successfully copied 2.05kB to temp:/etc/OpenCL/vendors/mali-arm64.icd
+
+ubuntu@ubuntu:/etc/OpenCL/vendors$
+
+### activity performed to enable device
+
+root@043ce5caab97:~# history
+    1  apt install clinfo
+    2  clinfo
+    3  apt install mesa-opencl-icd -y
+    4  clinfo
+    5  ls /usr/lib/libmali-g610.so
+    6  ls /usr/lib/libmali.so/
+    7  cd /etc/OpenCL/vendors/
+    8  ls
+    9  echo "/usr/lib/libmali-valhall-g610-g6p0-x11-wayland-gbm.so" > mali.icd
+   10  cd ~
+   11  apt install ocl-icd-opencl-dev -y
+   12  clinfo
+   13  apt install libxcb-dri2-0 libxcb-dri3-0 libwayland-client0 libwayland-server0 libx11-xcb1 -y
+   14  clinfo
+   15  rm /etc/OpenCL/vendors/rusticl.icd  (Please delete this file, it create confusion)
+   16  clinfo
+   17  history
+   
+   
+   
+# References
+Loading to GPU to docker: https://www.knowledgehut.com/blog/devops/docker-for-production#:~:text=One%20of%20the%20best%20practices%20is%20to,argument%20or%20readonly%20with%20the%20%2D%2Dmount%20argument.
+https://deckhouse.io/products/virtualization-platform/documentation/admin/platform-management/platform-scaling/node/node-customization.html#:~:text=In%20this%20directory%2C%20create%20a%20single%20of,as%20the%20number%20of%20subdirectories%20containing%20them.
+
+https://ib.bsb.br/setting-up-gpu-drivers-on-rk3588/

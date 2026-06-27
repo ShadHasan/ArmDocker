@@ -1,0 +1,1006 @@
+### create separate build directory
+
+# Create build directory
+mkdir -p build && cd build
+
+### Configuration generation:
+$> export OPENCV_DOWNLOAD_PATH=/tmp/opencv-cache
+$> cmake -DWITH_OPENCL=ON ../opencv-4.x/
+
+""" Note: opencv_contrib
+
+Note opencv_contrib does not work may be because of python dependecies which we don't want anything python related.
+-DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-4.x/
+"""
+
+"""Note: package config 
+-DOPENCV_GENERATE_PKGCONFIG=ON 
+
+is not supported from 4.x version
+"""
+
+""" Notes for cache
+Configuration script can try to download additional libraries and files from the internet, if it fails to do it corresponding features will be turned off. In some cases configuration error can occur. By default all files are first downloaded to the <source>/.cache directory and then unpacked or copied to the build directory. It is possible to change download cache location by setting environment variable or configuration option:
+
+export OPENCV_DOWNLOAD_PATH=/tmp/opencv-cache
+cmake ../opencv
+# or
+cmake -DOPENCV_DOWNLOAD_PATH=/tmp/opencv-cache ../opencv
+"""
+
+
+### Build
+
+$> cmake build .
+
+Equivalent we can use "make" to build
+
+$> make -j4
+
+where "-j" is to say amount of processor to be ustilised
+
+
+### Installation
+
+$> make install
+
+By default OpenCV will be installed to the /usr/local directory, all files will be copied to following locations:
+
+/usr/local/bin - executable files
+/usr/local/lib - libraries (.so)
+/usr/local/cmake/opencv4 - cmake package
+/usr/local/include/opencv4 - headers
+/usr/local/share/opencv4 - other files (e.g. trained cascades in XML format)
+Since /usr/local is owned by the root user, the installation should be performed with elevated privileges (sudo):
+
+```output
+-- Install configuration: "Release"
+-- Installing: /usr/local/share/licenses/opencv4/dlpack-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/flatbuffers-LICENSE.txt
+-- Installing: /usr/local/share/licenses/opencv4/opencl-headers-LICENSE.txt
+-- Installing: /usr/local/share/licenses/opencv4/ade-LICENSE
+-- Installing: /usr/local/include/opencv4/opencv2/cvconfig.h
+-- Installing: /usr/local/include/opencv4/opencv2/opencv_modules.hpp
+-- Installing: /usr/local/lib/pkgconfig/opencv4.pc
+-- Installing: /usr/local/lib/cmake/opencv4/OpenCVModules.cmake
+-- Installing: /usr/local/lib/cmake/opencv4/OpenCVModules-release.cmake
+-- Installing: /usr/local/lib/cmake/opencv4/OpenCVConfig-version.cmake
+-- Installing: /usr/local/lib/cmake/opencv4/OpenCVConfig.cmake
+-- Installing: /usr/local/bin/setup_vars_opencv4.sh
+-- Installing: /usr/local/share/opencv4/valgrind.supp
+-- Installing: /usr/local/share/opencv4/valgrind_3rdparty.supp
+-- Installing: /usr/local/share/licenses/opencv4/zlib-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/libjpeg-turbo-README.md
+-- Installing: /usr/local/share/licenses/opencv4/libjpeg-turbo-LICENSE.md
+-- Installing: /usr/local/share/licenses/opencv4/libjpeg-turbo-README.ijg
+-- Installing: /usr/local/share/licenses/opencv4/libtiff-LICENSE.md
+-- Installing: /usr/local/share/licenses/opencv4/libopenjp2-README.md
+-- Installing: /usr/local/share/licenses/opencv4/libopenjp2-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/libpng-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/libpng-README
+-- Installing: /usr/local/share/licenses/opencv4/openexr-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/openexr-AUTHORS.ilmbase
+-- Installing: /usr/local/share/licenses/opencv4/openexr-AUTHORS.openexr
+-- Installing: /usr/local/share/licenses/opencv4/protobuf-LICENSE
+-- Installing: /usr/local/share/licenses/opencv4/protobuf-README.md
+-- Installing: /usr/local/share/licenses/opencv4/ittnotify-BSD-3-Clause.txt
+-- Installing: /usr/local/share/licenses/opencv4/ittnotify-GPL-2.0-only.txt
+-- Installing: /usr/local/include/opencv4/opencv2/opencv.hpp
+-- Installing: /usr/local/lib/libopencv_core.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_core.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_core.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_core.so
+-- Installing: /usr/local/include/opencv4/opencv2/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/affine.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/async.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/base.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/bindings_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/bufferpool.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/check.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/core_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/block.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/border_interpolate.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/color.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/common.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/cuda_compat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/datamov_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/color_detail.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/reduce.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/reduce_key_val.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/transform_detail.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/type_traits_detail.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/detail/vec_distance_detail.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/dynamic_smem.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/emulation.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/filters.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/funcattrib.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/functional.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/limits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/reduce.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/saturate_cast.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/scan.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/simd_functions.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/transform.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/type_traits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/utility.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/vec_distance.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/vec_math.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/vec_traits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/warp.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/warp_reduce.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda/warp_shuffle.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda_stream_accessor.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cuda_types.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cv_cpu_dispatch.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/cv_cpu_helper.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/cvdef.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/cvstd.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cvstd.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/cvstd_wrapper.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/detail/async_promise.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/detail/dispatch_helper.impl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/detail/exception_ptr.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/directx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/dualquaternion.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/dualquaternion.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/eigen.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/fast_math.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/hal.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/interface.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_avx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_avx512.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_cpp.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_forward.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_lasx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_legacy_ops.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_lsx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_math.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_msa.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_neon.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_rvv071.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_rvv_scalable.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_sse.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_sse_em.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_vsx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/intrin_wasm.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/msa_macros.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/hal/simd_utils.impl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/mat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/mat.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/matx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/matx.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/neon_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/ocl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/ocl_genbase.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/ocl_defs.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/opencl_info.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/opencl_svm.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_clblas.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_clfft.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_core_wrappers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_gl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/autogenerated/opencl_gl_wrappers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_clblas.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_clfft.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_core_wrappers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_gl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_gl_wrappers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_svm_20.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_svm_definitions.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opencl/runtime/opencl_svm_hsa_extension.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/opengl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/operations.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/optim.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/ovx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/parallel/backend/parallel_for.openmp.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/parallel/backend/parallel_for.tbb.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/parallel/parallel_backend.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/persistence.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/quaternion.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/quaternion.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/saturate.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/simd_intrinsics.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/softfloat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/sse_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/traits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/types.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/types_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/core/utility.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/allocator_stats.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/allocator_stats.impl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/filesystem.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/fp_control_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/instrumentation.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/logger.defines.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/logger.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/logtag.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/tls.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/utils/trace.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/va_intel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/version.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/core/vsx_utils.hpp
+-- Installing: /usr/local/share/licenses/opencv4/SoftFloat-COPYING.txt
+-- Installing: /usr/local/lib/libopencv_flann.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_flann.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_flann.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_flann.so
+-- Installing: /usr/local/include/opencv4/opencv2/flann.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/flann/all_indices.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/allocator.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/any.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/autotuned_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/composite_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/config.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/defines.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/dist.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/dummy.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/dynamic_bitset.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/flann.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/flann/flann_base.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/flann/general.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/ground_truth.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/heap.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/hierarchical_clustering_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/index_testing.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/kdtree_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/kdtree_single_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/kmeans_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/linear_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/logger.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/lsh_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/lsh_table.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/matrix.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/miniflann.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/flann/nn_index.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/object_factory.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/params.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/random.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/result_set.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/sampling.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/saving.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/simplex_downhill.h
+-- Installing: /usr/local/include/opencv4/opencv2/flann/timer.h
+-- Installing: /usr/local/lib/libopencv_imgproc.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_imgproc.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_imgproc.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_imgproc.so
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/bindings.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/detail/gcgraph.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/detail/legacy.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/hal/hal.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/hal/interface.h
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/imgproc_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/segmentation.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgproc/types_c.h
+-- Installing: /usr/local/lib/libopencv_ml.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_ml.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_ml.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_ml.so
+-- Installing: /usr/local/include/opencv4/opencv2/ml.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/ml/ml.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/ml/ml.inl.hpp
+-- Installing: /usr/local/lib/libopencv_photo.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_photo.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_photo.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_photo.so
+-- Installing: /usr/local/include/opencv4/opencv2/photo.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/photo/cuda.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/photo/legacy/constants_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/photo/photo.hpp
+-- Installing: /usr/local/lib/libopencv_dnn.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_dnn.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_dnn.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_dnn.so
+-- Installing: /usr/local/include/opencv4/opencv2/dnn.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/all_layers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/dict.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/dnn.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/dnn.inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/layer.details.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/layer.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/shape_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/utils/debug_utils.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/utils/inference_engine.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/dnn/version.hpp
+-- Installing: /usr/local/lib/libopencv_features2d.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_features2d.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_features2d.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_features2d.so
+-- Installing: /usr/local/include/opencv4/opencv2/features2d.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/features2d/features2d.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/features2d/hal/interface.h
+-- Installing: /usr/local/share/licenses/opencv4/mscr-chi_table_LICENSE.txt
+-- Installing: /usr/local/share/licenses/opencv4/features2d-LICENSE.KAZE
+-- Installing: /usr/local/share/licenses/opencv4/features2d-LICENSE.AKAZE
+-- Installing: /usr/local/lib/libopencv_imgcodecs.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_imgcodecs.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_imgcodecs.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_imgcodecs.so
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs/imgcodecs.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs/imgcodecs_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs/ios.h
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs/legacy/constants_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/imgcodecs/macosx.h
+-- Installing: /usr/local/lib/libopencv_videoio.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_videoio.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_videoio.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_videoio.so
+-- Installing: /usr/local/include/opencv4/opencv2/videoio.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/videoio/legacy/constants_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/videoio/registry.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/videoio/videoio.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/videoio/videoio_c.h
+-- Installing: /usr/local/lib/libopencv_calib3d.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_calib3d.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_calib3d.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_calib3d.so
+-- Installing: /usr/local/include/opencv4/opencv2/calib3d.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/calib3d/calib3d.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/calib3d/calib3d_c.h
+-- Installing: /usr/local/lib/libopencv_highgui.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_highgui.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_highgui.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_highgui.so
+-- Installing: /usr/local/include/opencv4/opencv2/highgui.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/highgui/highgui.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/highgui/highgui_c.h
+-- Installing: /usr/local/lib/libopencv_objdetect.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_objdetect.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_objdetect.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_objdetect.so
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/aruco_board.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/aruco_detector.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/aruco_dictionary.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/barcode.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/charuco_detector.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/detection_based_tracker.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/face.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/graphical_code_detector.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/objdetect/objdetect.hpp
+-- Installing: /usr/local/lib/libopencv_stitching.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_stitching.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_stitching.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_stitching.so
+-- Installing: /usr/local/include/opencv4/opencv2/stitching.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/autocalib.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/blenders.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/camera.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/exposure_compensate.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/matchers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/motion_estimators.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/seam_finders.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/timelapsers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/util.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/util_inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/warpers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/detail/warpers_inl.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/stitching/warpers.hpp
+-- Installing: /usr/local/lib/libopencv_video.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_video.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_video.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_video.so
+-- Installing: /usr/local/include/opencv4/opencv2/video.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/video/background_segm.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/video/detail/tracking.detail.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/video/legacy/constants_c.h
+-- Installing: /usr/local/include/opencv4/opencv2/video/tracking.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/video/video.hpp
+-- Installing: /usr/local/lib/libopencv_gapi.so.4.14.0
+-- Installing: /usr/local/lib/libopencv_gapi.so.414
+-- Set non-toolchain portion of runtime path of "/usr/local/lib/libopencv_gapi.so.4.14.0" to "/usr/local/lib"
+-- Installing: /usr/local/lib/libopencv_gapi.so
+-- Installing: /usr/local/include/opencv4/opencv2/gapi.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/gcpukernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/ot.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/stereo.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/cpu/video.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/fluid/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/fluid/gfluidbuffer.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/fluid/gfluidkernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/fluid/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/garg.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/garray.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gasync_context.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcall.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcommon.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcompiled.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcompiled_async.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcompoundkernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcomputation.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gcomputation_async.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gframe.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gkernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gmat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gmetaarg.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gopaque.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gproto.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gpu/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gpu/ggpukernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gpu/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gscalar.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gstreaming.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gtransform.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gtype_traits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/gtyped.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/bindings_ie.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/bindings_onnx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/bindings_ov.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/ie.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/onnx.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/ov.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/parsers.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/infer/workload_type.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/media.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/oak/infer.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/oak/oak.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/ocl/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/ocl/goclkernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/ocl/imgproc.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/opencv_includes.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/operators.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/ot.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/assert.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/convert.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/cvdefs.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/exports.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/mat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/saturate.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/scalar.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/own/types.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/plaidml/core.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/plaidml/gplaidmlkernel.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/plaidml/plaidml.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/pysrc/python_stream_source.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/python/python.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/render.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/render/render.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/render/render_types.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/rmat.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/s11n.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/s11n/base.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/stereo.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/cap.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/desync.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/format.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/gstreamer/gstreamerpipeline.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/gstreamer/gstreamersource.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/meta.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/accel_types.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/cfg_params.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/data_provider_interface.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/default.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/device_selector_interface.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/onevpl/source.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/queue_source.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/source.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/streaming/sync.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/any.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/compiler_hints.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/copy_through_move.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/optional.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/throw.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/type_traits.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/util.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/util/variant.hpp
+-- Installing: /usr/local/include/opencv4/opencv2/gapi/video.hpp
+-- Installing: /usr/local/share/licenses/opencv4/vasot-LICENSE.txt
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_eye.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_eye_tree_eyeglasses.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalcatface.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalcatface_extended.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalface_alt.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalface_alt2.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalface_alt_tree.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_frontalface_default.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_fullbody.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_lefteye_2splits.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_license_plate_rus_16stages.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_lowerbody.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_profileface.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_righteye_2splits.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_russian_plate_number.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_smile.xml
+-- Installing: /usr/local/share/opencv4/haarcascades/haarcascade_upperbody.xml
+-- Installing: /usr/local/share/opencv4/lbpcascades/lbpcascade_frontalcatface.xml
+-- Installing: /usr/local/share/opencv4/lbpcascades/lbpcascade_frontalface.xml
+-- Installing: /usr/local/share/opencv4/lbpcascades/lbpcascade_frontalface_improved.xml
+-- Installing: /usr/local/share/opencv4/lbpcascades/lbpcascade_profileface.xml
+-- Installing: /usr/local/share/opencv4/lbpcascades/lbpcascade_silverware.xml
+-- Installing: /usr/local/bin/opencv_annotation
+-- Set non-toolchain portion of runtime path of "/usr/local/bin/opencv_annotation" to "/usr/local/lib"
+-- Installing: /usr/local/bin/opencv_visualisation
+-- Set non-toolchain portion of runtime path of "/usr/local/bin/opencv_visualisation" to "/usr/local/lib"
+-- Installing: /usr/local/bin/opencv_interactive-calibration
+-- Set non-toolchain portion of runtime path of "/usr/local/bin/opencv_interactive-calibration" to "/usr/local/lib"
+-- Installing: /usr/local/bin/opencv_version
+-- Set non-toolchain portion of runtime path of "/usr/local/bin/opencv_version" to "/usr/local/lib"
+-- Installing: /usr/local/bin/opencv_model_diagnostics
+-- Set non-toolchain portion of runtime path of "/usr/local/bin/opencv_model_diagnostics" to "/usr/local/lib"
+
+```
+
+
+### Package config
+
+$> pkg-config opencv4 --libs --cflags
+
+```output
+-I/usr/local/include/opencv4 -L/usr/local/lib -lopencv_gapi -lopencv_highgui -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_stitching -lopencv_video -lopencv_calib3d -lopencv_features2d -lopencv_dnn -lopencv_flann -lopencv_videoio -lopencv_imgcodecs -lopencv_imgproc -lopencv_core
+
+```
+
+Note: You may need to install `pkg-config`
+
+```
+apt install pkg-config
+```
+
+### Sample program
+Reference
+
+
+```sample 1
+```
+
+```sample2
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iterator>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/ocl.hpp>
+
+using namespace std; // Brings all names from std into the global scope
+
+int main()
+{
+  // Get the default context
+  cv::ocl::Context context = cv::ocl::Context::getDefault();
+  if (!cv::ocl::haveOpenCL())       
+      cout << "OpenCL is not avaiable..." << endl;          
+   else cout << "OpenCL is AVAILABLE! :) " << endl; //this is the output
+
+   cv::ocl::setUseOpenCL(true);
+
+   cout << context.ndevices() << " GPU devices are detected." << endl; 
+   for (int i = 0; i < context.ndevices(); i++)
+   {
+     cv::ocl::Device device = context.device(i);
+     cout << "name:              " << device.name() << endl;
+     cout << "available:         " << device.available() << endl;
+     cout << "imageSupport:      " << device.imageSupport() << endl;
+     cout << "OpenCL_C_Version:  " << device.OpenCL_C_Version() << endl;
+     cout << endl;
+    } //this works & i can see my video card name & opencl version
+    cv::ocl::Device(context.device(0));
+}
+```
+
+Ref URL: https://answers.opencv.org/question/120779/build-opencv-with-opencl-support/
+
+### Compiling with c++
+
+$> g++ <cpp file> -o <output file> $(pkg-config opencv4 --libs --cflags)
+
+
+### Illustaration of sample2 program as test.cpp file
+Compilation
+
+$> g++ test.cpp -o output $(pkg-config opencv4 --libs --cflags)
+
+Running:
+
+$> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
+
+$> ./output
+
+```output
+arm_release_ver: g13p0-01eac0, rk_so_ver: 3
+arm_release_ver of this libmali is 'g6p0-01eac0', rk_so_ver is '7'.
+OpenCL is AVAILABLE! :)
+1 GPU devices are detected.
+name:              Mali-LODX r0p0
+available:         1
+imageSupport:      1
+OpenCL_C_Version:  OpenCL C 2.0 v1.g6p0-01eac0.2819f9d4dbe0b5a2f89c835d8484f9cd
+```
+
+### GPU using via openCL in OpenCV. Below is the code with command execution
+
+```
+root@d100fdcc55db:~/test_program# export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/
+
+root@d100fdcc55db:~/test_program# ls
+load_image_matrix.cpp  output  te.png  test.cpp  test_opencl_runtime.cpp
+
+root@d100fdcc55db:~/test_program# cat load_image_matrix.cpp
+#include <opencv2/core.hpp>
+#include <opencv2/core/utility.hpp>
+#include "opencv2/imgcodecs.hpp"
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+#include <iostream>
+#include <sstream>
+
+using namespace std;
+using namespace cv;
+
+int main() {
+        Mat I, J;
+        const int times = 10000;
+        I = imread("te.png", IMREAD_COLOR);
+        for (int i = 0; i < times; ++i)
+        {
+                Mat clone_i = I.clone();
+        }
+
+        /*
+        for (int i = 0; i < 10000; i++)
+        {
+                // You cannot perform below activity because Matrix is image which matrix of matrix
+                // i.e. cooridnate than rgb.
+                // J = I * I;
+
+        }
+        */
+
+        // Use UMat for automatic OpenCL acceleration
+        UMat gpu_img, blurred_gpu_img;
+
+        // Data is automatically transferred to GPU memory
+        gpu_img = I.getUMat(cv::ACCESS_READ);
+
+        // This operation will run on the GPU if OpenCL is enabled
+        GaussianBlur(gpu_img, blurred_gpu_img, Size(5, 5), 0);
+
+        // Data is automatically transferred back to CPU memory when needed
+        Mat output_cpu = blurred_gpu_img.getMat(cv::ACCESS_READ);
+
+
+        return 0;
+}
+root@d100fdcc55db:~/test_program#
+root@d100fdcc55db:~/test_program#
+root@d100fdcc55db:~/test_program# ./output
+arm_release_ver: g13p0-01eac0, rk_so_ver: 3
+arm_release_ver of this libmali is 'g6p0-01eac0', rk_so_ver is '7'.
+[ WARN:0@0.044] global filesystem.cpp:489 getCacheDirectory Using world accessible cache directory. This may be not secure: /var/tmp/
+root@d100fdcc55db:~/test_program# vi load_image_matrix.cpp
+root@d100fdcc55db:~/test_program# root@d100fdcc55db:~/test_program#
+root@d100fdcc55db:~/test_program#
+root@d100fdcc55db:~/test_program#
+root@d100fdcc55db:~/test_program# g++ load_image_matrix.cpp -o output $(pkg-config opencv4 --libs --cflags)
+root@d100fdcc55db:~/test_program# ./output
+arm_release_ver: g13p0-01eac0, rk_so_ver: 3
+arm_release_ver of this libmali is 'g6p0-01eac0', rk_so_ver is '7'.
+[ WARN:0@0.044] global filesystem.cpp:489 getCacheDirectory Using world accessible cache directory. This may be not secure: /var/tmp/
+```
+
+### To view effect of gpu
+
+```
+$> watch -n 1 cat /sys/devices/platform/*.gpu/devfreq/*.gpu/load
+
+Every 1.0s: cat /sys/devices/platform/fb000000.gpu/devfreq/fb000000.gpu/load            ubuntu: Fri Feb  6 23:09:37 2026
+0@1000000000Hz
+
+
+ 
+```
+
+
+# Troubleshooting
+
+### Error: In-source builds are not allowed.
+
+It wants you to create a separate build directory (anywhere), and run cmake there. For example:
+
+mkdir my_build_dir
+cd my_build_dir
+rm ../CMakeCache.txt
+cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/home/jinha/OCV/source
+Note the .. in this example telling cmake where to look for the source.
+
+In case you didn't remove CMakeCache.txt before building again, it will still show this error. So, please remember to delete CMakeCache.txt first before running cmake.
+
+Note: Do not forget to delete cache path
+
+
+
+### on host verify gpu utilization
+
+$> $> watch -n 1 cat /sys/devices/platform/*.gpu/devfreq/*.gpu/load
+
+Location of devices
+$> cd /sys/devices/platform
+
+see with <>.gpu for device
+
+$> cd /sys/devices/platform/fb000000.gpu
+
+We should go in detail on below list:
+```
+ubuntu@ubuntu:/sys/devices/platform/fb000000.gpu$ ls
+core_mask              lp_mem_pool_size           reset_timeout
+csg_scheduling_period  mcu_shader_pwroff_timeout  scheduling
+debug_command          mem_pool_max_size          subsystem
+devfreq                mem_pool_size              supplier:platform:fd8d8000.power-management:power-controller
+driver                 mempool                    supplier:platform:firmware:scmi
+driver_override        misc                       supplier:regulator:regulator.9
+dvfs_period            modalias                   supplier:spi:spi2.0
+firmware_config        of_node                    uevent
+fw_timeout             pm_poweroff                utilisation
+gpuinfo                power                      utilisation_period
+idle_hysteresis_time   power_policy
+lp_mem_pool_max_size   progress_timeout
+```
+
+### device context not declare
+Error `cout << context.ndevices() << " GPU devices are detected." << endl;`
+
+Resolution:
+right way: `cv::ocl::context.ndevices()`
+
+### unable open shared object after compile
+
+Error: 
+./output: error while loading shared libraries: libopencv_core.so.414: cannot open shared object file: No such file or directory
+
+Resolution:
+
+$> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+ 
+ 
+then run `./output`
+ 
+ Note: /usr/local/lib is path of `libopencv_core.so` . Check during installation output for `libopencv_core.so` path.
+ 
+ 
+## Linking and building shared object c class
+
+Linking a shared object in C involves two primary steps using a compiler like GCC on Linux: compile-time linking (telling the compiler about the library's symbols) and runtime loading (telling the operating system where to find the actual file when the program runs). 
+
+#### Step 1: Create the Shared Library 
+
+First, you need to create the shared object file (.so on Linux). 
+
+Write the library code and header file:
+library.h: Contains function prototypes.
+library.c: Contains the function definitions.
+
+Compile the source files into Position Independent Code (PIC):
+
+```bash
+gcc -c -fPIC library.c -o library.o
+```
+Create the shared library file:
+
+```bash
+gcc -shared -o libmylibrary.so library.o
+```
+
+By convention, shared libraries are named lib prefix and a .so suffix (e.g., libmylibrary.so), so the linker can easily find them later. 
+
+#### Step 2: Compile and Link Your Program
+Next, compile your main program and link it against the shared library. 
+
+Write the main program (main.c): This file must #include "library.h".
+
+Compile the main program and link it:
+
+```bash
+gcc main.c -L. -lmylibrary -o myprogram
+```
+-L. tells the linker to look for libraries in the current directory (.) in addition to standard locations.
+-l followed by the library name (without the lib prefix or .so suffix, e.g., mylibrary for libmylibrary.so) specifies which library to link against. 
+
+#### Step 3: Ensure the Library is Found at Runtime 
+When you run your program, the operating system's dynamic loader needs to locate the shared library file. If it's not in a standard system directory (like /usr/lib), you'll get an error. 
+
+You can solve this in two common ways:
+
+Set the LD_LIBRARY_PATH environment variable (temporary):
+```bash
+export LD_LIBRARY_PATH=.
+```
+
+```executable
+./myprogram
+```
+
+(Note: The export command is for Bash/sh; use setenv LD_LIBRARY_PATH . for Tcsh).
+
+Embed the path using rpath (recommended): This embeds the library location directly into the executable at link time.
+
+```bash
+gcc main.c -L. -Wl,-rpath=. -lmylibrary -o myprogram
+
+./myprogram
+```
+
+For a comprehensive guide, resources like Cprogramming.com offer detailed tutorials on creating and using shared libraries in C. 
+Shared libraries with GCC on Linux - [Cprogramming.com](https://www.cprogramming.com/tutorial/shared-libraries-linux-gcc.html)
+Before we get started, it might help to get a quick rundown of everything that happens from source code to running program: * C Pr...
+
+### Error `filesystem.cpp:489 getCacheDirectory Using world accessible cache directory`
+```
+The message global filesystem.cpp:489 getCacheDirectory Using world accessible cache directory. This may be not secure: /var/tmp/ is a warning message from the OpenCV library indicating that the application is using the world-writable /var/tmp directory for cache files, which is considered a potential security risk for sensitive data. 
+GitHub
+GitHub
+ +4
+Explanation
+OpenCV Library: The message is generated by the filesystem.cpp file within the OpenCV codebase, a popular open-source computer vision library.
+World-Writable Directory: /var/tmp is a standard Linux directory designed to store temporary files that should be preserved across system reboots. It is inherently "world-accessible" or world-writable, meaning any user on the system can create files there. The sticky bit permission ensures that only the file's owner can delete or rename it, but other users can still read the data if not otherwise restricted.
+Security Risk: The warning highlights that storing sensitive information in /var/tmp could lead to unauthorized access by other users on the same system. 
+GitHub
+GitHub
+ +4
+Solution
+This is typically a warning and not an error that stops the program from running. The appropriate action depends on the sensitivity of the data being processed by the application using OpenCV: 
+GitHub
+GitHub
+ +3
+If the cached data is not sensitive: The warning can be safely ignored, as /var/tmp is a common and legitimate location for non-sensitive temporary files.
+If the cached data is sensitive: You should configure the application to use a different, more secure directory with restricted permissions.
+Consult your application's documentation or configuration options to find out how to specify a custom cache directory.
+If you have control over the source code, you can modify the application to set a specific, secure cache location with a tool like the Oracle Help Center's getCacheDirectory function (depending on the exact software stack)
+```
+
+
+-----------------
+
+## All other References
+Opencl Context : https://docs.opencv.org/3.4/d1/d45/classcv_1_1ocl_1_1Context.html
+Main tutorial for installation: https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html
+OpenCV Configuration(Important): https://docs.opencv.org/4.x/db/d05/tutorial_config_reference.html
+
+
+
+
+# How to use CV with OpenCL that is ocl::cv(From Google AI) 
+### Note: Partially Explored
+
+
+OpenCV's cv::ocl module allows you to write custom OpenCL kernels and interact with the OpenCL context and devices directly. However, a more common and recommended approach is to use the T-API (Transparent API) which automatically utilizes OpenCL acceleration for standard OpenCV functions when available, by using cv::UMat instead of cv::Mat. 
+
+
+Using the Transparent API (T-API) 
+The T-API is the easiest way to leverage OpenCL acceleration. Simply replace cv::Mat with cv::UMat in your code. 
+
+```cpp code
+#include <opencv2/opencv.hpp>
+#include <iostream>
+
+int main() {
+    // Enable OpenCL transparent API
+    if (!cv::ocl::haveOpenCL()) {
+        std::cout << "OpenCL not available. Using CPU fallback." << std::endl;
+    } else {
+        cv::ocl::setUseOpenCL(true);
+        std::cout << "OpenCL is available and enabled." << std::endl;
+    }
+
+    cv::Mat cpu_img; // Regular CPU Mat
+    // Load image into cpu_img
+    // (e.g., cpu_img = cv::imread("lena.png", cv::IMREAD_GRAYSCALE);)
+
+    // Use UMat for automatic OpenCL acceleration
+    cv::UMat gpu_img, blurred_gpu_img;
+
+    // Data is automatically transferred to GPU memory
+    gpu_img = cpu_img.getUMat(cv::ACCESS_READ);
+
+    // This operation will run on the GPU if OpenCL is enabled
+    cv::GaussianBlur(gpu_img, blurred_gpu_img, cv::Size(5, 5), 0);
+
+    // Data is automatically transferred back to CPU memory when needed
+    cv::Mat output_cpu = blurred_gpu_img.getMat(cv::ACCESS_READ);
+
+    // Display or save the result
+    // cv::imshow("Blurred GPU", output_cpu);
+    // cv::waitKey(0);
+
+    return 0;
+}
+```
+
+### Writing a Custom OpenCL Kernel with cv::ocl 
+
+For situations where you need to write a custom OpenCL kernel, you can use classes like cv::ocl::Context, cv::ocl::ProgramSource, cv::ocl::Program, and cv::ocl::Kernel.
+
+Here is a simplified example demonstrating the key steps involved, based on snippets from the OpenCV documentation and community examples:
+
+Initialize OpenCL Context and Device:
+```cpp
+#include <opencv2/core/ocl.hpp>
+#include <iostream>
+
+if (!cv::ocl::haveOpenCL()) {
+    std::cerr << "OpenCL not available." << std::endl;
+    return -1;
+}
+cv::ocl::Context context;
+if (!context.create(cv::ocl::Device::TYPE_GPU)) {
+    std::cerr << "Failed to create OpenCL context." << std::endl;
+    return -1;
+}
+cv::ocl::Device device = context.device(0); // Select the first device
+std::cout << "Using device: " << device.name() << std::endl;
+```
+
+Define the OpenCL Kernel Source (as a C++ string):
+```cpp
+const char* kernelSource = "__kernel void myKernel(__global const uchar* src, __global uchar* dst, int cols, int rows) {\n"
+                           "    int x = get_global_id(0);\n"
+                           "    int y = get_global_id(1);\n"
+                           "    if (x < cols && y < rows) {\n"
+                           "        dst[y * cols + x] = 255 - src[y * cols + x]; // Invert pixel value\n"
+                           "    }\n"
+                           "}\n";
+```
+
+Build the Program and Kernel:
+
+```cpp
+cv::ocl::ProgramSource programSource(kernelSource);
+std::string errorMessage;
+cv::ocl::Program program = context.buildProgram(programSource, "", errorMessage);
+if (!errorMessage.empty()) {
+    std::cerr << "Build error: " << errorMessage << std::endl;
+    return -1;
+}
+cv::ocl::Kernel kernel("myKernel", program);
+```
+
+Prepare Data (UMat) and Execute the Kernel:
+
+cpp
+```cv::Mat mat_src = cv::imread("lena.png", cv::IMREAD_GRAYSCALE);
+cv::UMat u_src, u_dst;
+mat_src.copyTo(u_src); // Copy data to UMat (GPU memory)
+u_dst.create(mat_src.size(), mat_src.type());
+
+// Set kernel arguments
+kernel.set(0, u_src);
+kernel.set(1, u_dst);
+kernel.set(2, mat_src.cols);
+kernel.set(3, mat_src.rows);
+
+// Define work-group dimensions
+size_t globalSize[2] = {(size_t)mat_src.cols, (size_t)mat_src.rows};
+size_t localSize[2] = {16, 16}; // Optimal local size may vary by device
+
+// Run the kernel
+kernel.run(2, globalSize, localSize, false);
+cv::ocl::finish(); // Wait for completion
+
+// Get the result back to CPU Mat
+cv::Mat mat_dst;
+u_dst.copyTo(mat_dst);
+
+// Display or save
+// cv::imshow("Inverted Custom Kernel", mat_dst);
+// cv::waitKey(0);
+``` 
+For full, runnable examples provided by the community and documentation, you can refer to the following GitHub Gists:
+[Sample code to execute custom OpenCL kernel on OpenCV 2.4.9](https://gist.github.com/atinfinity/8c25c8fb1b3708aa0944)
+[Sample program for OpenCL interaction](https://gist.github.com/tomoaki0705/bee46d7a35fa220459c1c76b243759bb)
+
+
+
+

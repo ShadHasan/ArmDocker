@@ -1,0 +1,57 @@
+H/W path    Device        Class          Description
+====================================================
+                          system         Orange Pi 5 Pro
+/0                        bus            Motherboard
+/0/0                      processor      cpu-map
+/0/1                      processor      cpu
+/0/1/0                    memory         32KiB L1 Cache
+/0/2                      processor      cpu
+/0/2/0                    memory         32KiB L1 Cache
+/0/3                      processor      cpu
+/0/3/0                    memory         32KiB L1 Cache
+/0/4                      processor      cpu
+/0/4/0                    memory         32KiB L1 Cache
+/0/5                      processor      cpu
+/0/5/0                    memory         64KiB L1 Cache
+/0/6                      processor      cpu
+/0/6/0                    memory         64KiB L1 Cache
+/0/7                      processor      cpu
+/0/7/0                    memory         64KiB L1 Cache
+/0/8                      processor      cpu
+/0/8/0                    memory         64KiB L1 Cache
+/0/9                      processor      idle-states
+/0/a                      processor      l2-cache-b0
+/0/b                      processor      l2-cache-b1
+/0/c                      processor      l2-cache-b2
+/0/d                      processor      l2-cache-b3
+/0/e                      processor      l2-cache-l0
+/0/f                      processor      l2-cache-l1
+/0/10                     processor      l2-cache-l2
+/0/11                     processor      l2-cache-l3
+/0/12                     processor      l3-cache
+/0/13                     memory         15GiB System memory
+/0/100                    bridge         RK3588
+/0/100/0    /dev/nvme0    storage        SPCC M.2 PCIe SSD
+/0/100/0/0  hwmon7        disk           NVMe disk
+/0/100/0/2  /dev/ng0n1    disk           NVMe disk
+/0/100/0/1  /dev/nvme0n1  disk           NVMe disk
+/0/101                    bridge         RK3588
+/0/101/0    enP4p65s0     network        YT6801 Gigabit Ethernet Controller
+/1          mmc0          bus            MMC Host
+/2          mmc1          bus            MMC Host
+/2/1        /dev/mmcblk1  disk           SD128
+/3          mmc2          bus            MMC Host
+/3/1                      generic        SDIO Device
+/3/1/1      mmc2:0001:1   network        43455
+/3/1/2      mmc2:0001:2   generic        43455
+/3/1/3      mmc2:0001:3   communication  43455
+/4          card0         multimedia     rockchiphdmi0
+/5          card1         multimedia     rockchipdp0
+/6          card2         multimedia     rockchipes8388
+/7          input0        input          rk805 pwrkey
+/8          input1        input          rockchip-hdmi0 rockchip-hdmi0
+/9          input2        input          rockchip-dp0 rockchip-dp0
+/a          input3        input          headset-keys
+/b          input4        input          rockchip-es8388 Headset
+/c          input5        input          bt-powerkey
+WARNING: output may be incomplete or inaccurate, you should run this program as super-user.
