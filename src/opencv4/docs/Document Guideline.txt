@@ -1,0 +1,12 @@
+# Intention 
+This document is to assist through reference document help to achievce Opencv4 C++ dockerized platform utilizing MALI GPU 610 in orangePi5Pro Ubuntu Noble based on microprocessor RK3588
+
+## Very first document to install OpenCL in Rock3588 chipset or SBC
+
+`Rock3588UbuntuG610MaliOpenCL.pdf`
+`Setting Up GPU Drivers on RK3588 - infoBAG.pdf` 
+`Setup Jellyfin with Hardware Acceleration on Orange Pi 5.pdf` - This shows how host device map to docker but you need to add firmware as well.
+
+## OpenCV compiling and installation
+
+`Good_ToGoThrough_OpenCV_ OpenCV configuration options reference.pdf`

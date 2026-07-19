@@ -1,0 +1,2 @@
+1e43476aeff745b702248318ce3bf75c  libmali-valhall-g610-g6p0-x11-wayland-gbm.so
+ef6e1831f788bba021baefcb5a837740  mali_csffw.bin

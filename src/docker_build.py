@@ -244,14 +244,30 @@ config = {
 			"MonitorGPULoad": "watch -n 1 cat /sys/devices/platform/*.gpu/devfreq/*.gpu/load"
 			},
 		"ExplorationAndTest": {
-			"1": "Build base docker images from aarch64 ubuntu noble with build-essential kit.",
-			"2": "Copy wayland driver and etc.",
-			"Compilation and Installation of library": "",
-			"3": "Start container with command, `sudo docker run -it     --name=temp     --device /dev/mali0:/dev/mali0     -v /lib/firmware/mali_csffw.bin:/lib/firmware/mali_csffw.bin:ro     -v /usr/lib/aarch64-linux-gnu/libmali.so:/usr/lib/libmali.so:ro     opencv4_exploration /bin/bash`",
-			"": "apt install clinfo mesa-opencl-icd ocl-icd-opencl-dev libxcb-dri2-0 libxcb-dri3-0 libwayland-client0 libwayland-server0 libx11-xcb1 -y",
-			"4": "rm /etc/OpenCL/vendors/rusticl.icd  (Please delete this file, it creates confusion)",
-			"4": "Test by execute code like this: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/; \r\n g++ load_image_matrix.cpp -o output $(pkg-config opencv4 --libs --cflags); \r\n ./output`",
-			"5": "Monitor GPU Load for spike."
+            "0": {
+                    "description": "Prepare host, copy malidriver then firmware",
+                    "Notes": "You may find below download at download folder",
+                    "steps": [
+                        "cd /usr/lib",
+                        "sudo wget https://github.com/JeffyCN/mirrors/raw/libmali/lib/aarch64-linux-gnu/libmali-valhall-g610-g6p0-x11-wayland-gbm.so libmali-g610.so",
+                        "cd /lib/firmware",
+                        "wget https://github.com/JeffyCN/mirrors/raw/libmali/firmware/g610/mali_csffw.bin"
+                    ]
+                },
+			"1": {
+                    "description": "Build base docker images from aarch64 ubuntu noble with build-essential kit."
+                },
+			"2": {
+                    "description": "Copy wayland driver and etc."
+                },
+			"3": {
+                    "description": "Compilation and Installation of library"
+                },
+			"4": "Start container with command, `sudo docker run -it     --name=temp     --device /dev/mali0:/dev/mali0     -v /lib/firmware/mali_csffw.bin:/lib/firmware/mali_csffw.bin:ro     -v /usr/lib/aarch64-linux-gnu/libmali.so:/usr/lib/libmali.so:ro     opencv4_exploration /bin/bash`",
+			"5": "apt install clinfo mesa-opencl-icd ocl-icd-opencl-dev libxcb-dri2-0 libxcb-dri3-0 libwayland-client0 libwayland-server0 libx11-xcb1 -y",
+			"6": "rm /etc/OpenCL/vendors/rusticl.icd  (Please delete this file, it creates confusion)",
+			"7": "Test by execute code like this: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib/; \r\n g++ load_image_matrix.cpp -o output $(pkg-config opencv4 --libs --cflags); \r\n ./output`",
+			"8": "Monitor GPU Load for spike."
 		},
 		"doubts": {
 			"mali.icd vs mali-arm64.icd": "Both mali.icd and mali-arm64.icd are configuration files used by the OpenCL Installable Client Driver (ICD) Loader. They tell your system (typically Linux on ARM) where to find the proprietary libmali library needed to enable GPU-accelerated computing.The Core Differences \r\n mali.icd: The generic, traditional ICD configuration name used by most ARM Linux distributions (like Ubuntu, Debian, or Armbian) on aarch64. \r\n mali-arm64.icd: A specifically named ICD file often utilized in customized distributions (such as specific Rockchip builds or containerized environments like Frigate) to explicitly designate the 64-bit architecture. \r\n Contents of the Files \r\n Inside both .icd files, you will find a simple text string pointing to the exact location of your .so driver file.For example:`/usr/lib/aarch64-linux-gnu/libmali.so`(Note: The exact library name inside the file depends on your specific Mali DDK version, such as `libmali-valhall-g610-g6p0-x11-gbm.so`). \r\n Which one should you use? \r\n Use mali.icd if: You are following standard, community-supported setup guides. It is the most universally recognized name by standard OpenCL utilities like clinfo.\r\n Use mali-arm64.icd if: You are working with a vendor-provided or containerized image (e.g., custom Frigate/Rockchip configurations) where the system expects this exact filename to register the 64-bit GPU properly. \r\n In either case, you can generally verify that your OpenCL stack is working correctly and reading the .icd file by installing and running clinfo."

@@ -5,6 +5,8 @@
 FROM arm64v8/ubuntu:noble
 RUN apt update -y
 RUN apt install -y git build-essential cmake make
+RUN echo "/usr/lib/libmali-g610.so" | sudo tee
+/etc/OpenCL/vendors/mali.icd
 
 Note: we haven't used any build tool in below exploration
 
@@ -76,6 +78,7 @@ root@043ce5caab97:~# history
    
 # References
 Loading to GPU to docker: https://www.knowledgehut.com/blog/devops/docker-for-production#:~:text=One%20of%20the%20best%20practices%20is%20to,argument%20or%20readonly%20with%20the%20%2D%2Dmount%20argument.
+
 https://deckhouse.io/products/virtualization-platform/documentation/admin/platform-management/platform-scaling/node/node-customization.html#:~:text=In%20this%20directory%2C%20create%20a%20single%20of,as%20the%20number%20of%20subdirectories%20containing%20them.
 
 https://ib.bsb.br/setting-up-gpu-drivers-on-rk3588/

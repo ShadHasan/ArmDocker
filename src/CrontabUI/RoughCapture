@@ -1,0 +1,653 @@
+ubuntu@ubuntu:~$ history
+    1  cd /etc/netplan/
+    2  ls
+    3  cat 50-cloud-init.yaml 
+    4  sudo cat 50-cloud-init.yaml 
+    5  ip addr ls
+    6  ip addr add 192.168.36.8/24 dev eth0
+    7  sudo ip addr add 192.168.36.8/24 dev eth0
+    8  sudo ip addr add 192.168.36.8/24 dev eth0 | less
+    9  cat /etc/ssh/sshd_config
+   10  cat /etc/ssh/sshd_config | less
+   11  sudo vi /etc/ssh/sshd_config 
+   12  sudo systemctl restart sshd
+   13  sudo vi /etc/ssh/sshd_config 
+   14  sudo systemctl reload sshd
+   15  sudo vi /etc/ssh/sshd_config 
+   16  cd /etc/ssh/sshd_config/
+   17  cd /etc/ssh/sshd_config
+   18  cd /etc/ssh/ssh_config.d/
+   19  ls
+   20  cat 20-systemd-ssh-proxy.conf 
+   21  sudo vi /etc/ssh/sshd_config 
+   22  sudo systemctl reload sshd
+   23  sudo systemctl restart sshd
+   24  cat /etc/netplan/50-cloud-init.yaml 
+   25  sudo cat /etc/netplan/50-cloud-init.yaml \
+   26  sudo cat /etc/netplan/50-cloud-init.yaml
+   27  sudo vi /etc/ssh/sshd_config 
+   28  sudo ip addr add 192.168.36.8/24 dev eth0
+   29  sudo reboot
+   30  exit
+   31  sudo ip addr add 192.168.36.8/24 dev eth0
+   32  sudo vi /etc/ssh/sshd_config 
+   33  sudo systemctl restart sshd
+   34  sudo systemctl restart ssh
+   35  cat /etc/netplan/50-cloud-init.yaml 
+   36  sudo cat /etc/netplan/50-cloud-init.yaml 
+   37  ip addr ls
+   38  ls
+   39  sudo mv /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml-bak
+   40  sudo vi /etc/netplan/50-cloud-init.yaml 
+   41  sudo vi /etc/netplan/50-cloud-init.yaml
+   42  sudo vi /etc/netplan/50-cloud-init.yaml 
+   43  sudo netplan apply
+   44  sudo vi /etc/netplan/50-cloud-init.yaml 
+   45  sudo netplan apply
+   46  sudo chmod 600 /etc/netplan/50-cloud-init.yaml
+   47  sudo netplan apply
+   48  ip add ls 
+   49  sudo vi /etc/netplan/50-cloud-init.yaml 
+   50  sudo netplan apply
+   51  sudo vi /etc/netplan/50-cloud-init.yaml 
+   52  sudo netplan apply
+   53  sudo vi /etc/netplan/50-cloud-init.yaml 
+   54  sudo ip link set wlan0 up
+   55  ip add ls 
+   56  sudo vi /etc/netplan/50-cloud-init.yaml 
+   57  sudo netplan apply
+   58  ip add ls 
+   59  sudo reboot
+   60  ip add ls 
+   61  sudo netplan status
+   62  sudo netplan status --all
+   63  sudo vi /etc/netplan/50-cloud-init.yaml 
+   64  sudo netplan apply
+   65  sudo netplan status --all
+   66  sudo vi /etc/netplan/50-cloud-init.yaml 
+   67  sudo netplan apply
+   68  sudo netplan status --all
+   69  sudo vi /etc/netplan/50-cloud-init.yaml 
+   70  ip add ls 
+   71  sudo vi /etc/netplan/50-cloud-init.yaml 
+   72  sudo netplan apply
+   73  sudo vi /etc/netplan/50-cloud-init.yaml 
+   74  sudo netplan apply
+   75  sudo netplan generate
+   76  sudo vi /etc/netplan/50-cloud-init.yaml 
+   77  ip add ls 
+   78  sudo vi /etc/netplan/50-cloud-init.yaml 
+   79  networkctl
+   80  sudo systemctl restart netplan-wpa-wlan0
+   81  networkctl
+   82  sudo netplan status
+   83  sudo netplan status --all
+   84  sudo vi /etc/netplan/50-cloud-init.yaml 
+   85  sudo netplan apply
+   86  sudo netplan status --all
+   87  sudo netplan apply /etc/netplan/50-cloud-init.yaml 
+   88  sudo netplan status --all
+   89  sudo vi /etc/netplan/50-cloud-init.yaml 
+   90  sudo netplan apply /etc/netplan/50-cloud-init.yaml 
+   91  sudo vi /etc/netplan/50-cloud-init.yaml 
+   92  sudo netplan apply /etc/netplan/50-cloud-init.yaml 
+   93  sudo vi /etc/netplan/50-cloud-init.yaml 
+   94  sudo netplan apply /etc/netplan/50-cloud-init.yaml 
+   95  sudo netplan status --all
+   96  sudo vi /etc/netplan/50-cloud-init.yaml 
+   97  sudo netplan apply /etc/netplan/50-cloud-init.yaml 
+   98  sudo netplan status --all
+   99  sudo vi /etc/netplan/50-cloud-init.yaml 
+  100  sudo apt install docker-ce
+  101  sudo apt install docker
+  102  curl -sSL https://get.docker.com | sh
+  103  sudo curl -sSL https://get.docker.com | sh
+  104  ps -aux
+  105  sudo apt update -y
+  106  ps -aux
+  107  sudo curl -sSL https://get.docker.com | sh
+  108  docker ps -a
+  109  sudo docker ps -a
+  110  docker run --name="node" -it --entrypoint sh node:25-alpine
+  111  sudo docker run --name="node" -it --entrypoint sh node:25-alpine
+  112  sudo docker ps -a
+  113  sudo docker rm node
+  114  docker run -d -p 8000:8000 alseambusher/crontab-ui
+  115  sudo docker run -d -p 8000:8000 alseambusher/crontab-ui
+  116  sudo docker ps -a
+  117  sudo docker rm sweet_cerf
+  118  sudo docker images
+  119  sudo docker image rm alseambusher/crontab-ui:latest
+  120  git
+  121  wget https://nodejs.org/dist/v25.2.1/node-v25.2.1-linux-arm64.tar.xz
+  122  ls
+  123  mkdir node25
+  124  mv node-v25.2.1-linux-arm64.tar.xz node25/
+  125  cd node25/
+  126  tar -xvf node-v25.2.1-linux-arm64.tar.xz 
+  127  ls
+  128  mv node-v25.2.1-linux-arm64.tar.xz ../
+  129  ls
+  130  cd node-v25.2.1-linux-arm64/
+  131  ls
+  132  cd ..
+  133  ls
+  134  mkdir crontab-ui
+  135  cd crontab-ui/
+  136  ../node-v25.2.1-linux-arm64/bin/npm -i -g crontab-ui
+  137  export PATH=$PATH:/opt/node/bin
+  138  ../node-v25.2.1-linux-arm64/bin/npm -i -g crontab-ui
+  139  npm -i -g crontab-ui
+  140  export PATH=$PATH:/home/ubuntu/node25/node-v25.2.1-linux-arm64/bin/
+  141  npm -i -g crontab-ui
+  142  npm -i -g pm2
+  143  npm help
+  144  npm install -g pm2
+  145  npm install -g crontab-ui
+  146  pm2 start crontab-ui
+  147  ss -tulpn
+  148  npm root -g
+  149  cd /home/ubuntu/node25/node-v25.2.1-linux-arm64/lib/node_modules
+  150  ls
+  151  cd crontab-ui/
+  152  ls
+  153  cat app.js
+  154  cat app.json 
+  155  ls
+  156  cat routes.js 
+  157  ls
+  158  cd config/
+  159  ls
+  160  cat mailconfig.js 
+  161  cd ..
+  162  ls
+  163  cat package.json 
+  164  cat app.js
+  165  cd ~
+  166  pm2 stop crontab-ui
+  167  pm2 --help
+  168  exprt PATH:$PATH:/home/ubuntu/node25/node-v25.2.1-linux-arm64/bin/
+  169  export PATH:$PATH:/home/ubuntu/node25/node-v25.2.1-linux-arm64/bin/
+  170  export PATH:$PATH:/home/ubuntu/node25/node-v25.2.1-linux-arm64/bin
+  171  export PATH=$PATH:/home/ubuntu/node25/node-v25.2.1-linux-arm64/bin
+  172  pm2 --help
+  173  pm2 stop crontab-ui
+  174  export HOST=0.0.0.0
+  175  pm2  crontab-ui
+  176  ss -tulpn
+  177  env
+  178  pm2 stop crontab-ui
+  179  pm2 del crontab-ui
+  180  export HOST=0.0.0.0
+  181  pm2 start crontab-ui
+  182  ss -tulpn
+  183  python -V
+  184  python3 -V
+  185  pm2 del crontab-ui
+  186  mkdir crontab_db
+  187  pwd
+  188  export CRON_DB_PATH=/home/ubuntu/crontab_db crontab-ui
+  189  export CRON_DB_PATH=/home/ubuntu/crontab_db
+  190  pm2 start crontab-ui
+  191  ls
+  192  cd crontab_db/
+  193  ls
+  194  cat crontab.db 
+  195  cd ~/node25/node-v25.2.1-linux-arm64/lib/node_modules/crontab-ui/
+  196  ls
+  197  cd crontabs/
+  198  ls
+  199  cd logs/
+  200  ls
+  201  cd ..
+  202  cat env.db 
+  203  cat crontab.db 
+  204  cd ~
+  205  ls
+  206  pm2 logs crontab-ui
+  207  sudo vi .bashrc 
+  208  source ~/.bashrc
+  209  ls
+  210  cd crontab_db/
+  211  ls
+  212  cat crontab.db 
+  213  reboot
+  214  sudo reboot
+  215  ls
+  216  crontab-ui --autosave
+  217  sudo reboot
+  218  export HOST=0.0.0.0
+  219  export CRON_DB_PATH=/home/ubuntu/crontab_db
+  220  pm2 start crontab-ui
+  221  crontab-ui -version
+  222  crontab-ui help
+  223  crontab-ui --help
+  224  cd /home/ubuntu/node25/node-v25.2.1-linux-arm64/lib/node_modules/crontab-ui/
+  225  ls
+  226  cat app.json 
+  227  cat package.json 
+  228  sudo chown -R ubuntu $(npm root -g)/crontab-ui
+  229  npm root -g
+  230  cd ~
+  231  ls
+  232  pm2 stop crontab-ui
+  233  pm2 del crontab-ui
+  234  pm2 start crontab-ui
+  235  sudpm2 logs crontab-ui
+  236  pm2 del crontab-ui
+  237  sudo pm2 start crontab-ui
+  238  sudo su
+  239  vi /etc/netplan/50-cloud-init.yaml
+  240  sudo vi /etc/netplan/50-cloud-init.yaml
+  241  sudo netplan apply
+  242  sudo su -
+  243  pm2 list
+  244  sudo docker ls
+  245  sudo docker ps -a
+  246  sudo docker images
+  247  ss -tulpn
+  248  pm2 list
+  249  pm2 status
+  250  sudo su
+  251  pm2 delete crontab-ui
+  252  ps -aux
+  253  kill -9 2180
+  254  sudo kill -9 2180
+  255  sudo su
+  256  sudo docker ps -a
+  257  sudo docker commit node
+  258  sudo docker images
+  259  sudo docker image all
+  260  sudo docker images
+  261  docker images
+  262  sudo su
+  263  ls
+  264  sudo docker ps -a
+  265  sudo docker exec -it node bash
+  266  sudo docker exec -it node sh
+  267  sudo docker ps -a
+  268  sudo docker images
+  269  sudo docker run -it --rm --name=node2 -entrypoint /bin/sh tinyorb/armv8_crontab-ui sh
+  270  sudo docker run -it --rm --name=node2 --entrypoint=/bin/sh tinyorb/armv8_crontab-ui sh
+  271  sudo docker run -it --rm --name=node2 --entrypoint=/bin/sh tinyorb/armv8_crontab-ui 
+  272  exit
+  273  sudo docker ps -a
+  274  sudo docker logs node
+  275  ;5R;5R;5R;5R
+  276  sudo docker ps -a
+  277  sudo docker exec -it node sh
+  278  exit
+  279  sudo docker ps -a
+  280  sudo docker rm node
+  281  sudo docker stop node
+  282  sudo docker images
+  283  ssudo docker ps -a
+  284  sudo docker ps -a
+  285  mkdir crontab-ui_arm64v8
+  286  cd crontab-ui_arm64v8/
+  287  sudo docker images
+  288  vi Dockerfile
+  289  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  290  vi Dockerfile
+  291  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  292  vi Dockerfile
+  293  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  294  sudo docker ps -a
+  295  sudo docker run --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  296  ls
+  297  vi Dockerfile 
+  298  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  299  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  300  sudo docker ps -a
+  301  sudo docker logs node2
+  302  sudo docker rm node2
+  303  sudo docker run --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  304  sudo docker rm node2
+  305  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  306  vi Dockerfile 
+  307  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  308  sudo docker run --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  309  sudo docker rm node2
+  310  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  311  vi Dockerfile 
+  312  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  313  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  314  sudo docker logs node2
+  315  vi Dockerfile 
+  316  sudo docker ps -a
+  317  vi Dockerfile 
+  318  sudo docker rm node2
+  319  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  320  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  321  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  322  sudo docker logs node2
+  323  sudo docker rm node2
+  324  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  325  vi Dockerfile 
+  326  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  327  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  328  sudo docker logs node2
+  329  vi Dockerfile 
+  330  sudo docker rm node2
+  331  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  332  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  333  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  334  sudo docker logs node2
+  335  vi Dockerfile 
+  336  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  337  vi Dockerfile 
+  338  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  339  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  340  sudo docker logs node2
+  341  sudo docker rm node2
+  342  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  343  vi Dockerfile 
+  344  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  345  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  346  sudo docker logs node2
+  347  sudo docker rm node2
+  348  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  349  vi Dockerfile 
+  350  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  351  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  352  sudo docker logs node2
+  353  sudo docker rm node2
+  354  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  355  vi Dockerfile 
+  356  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  357  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  358  sudo docker logs node2
+  359  sudo docker rm node2
+  360  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  361  vi Dockerfile 
+  362  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  363  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  364  sudo docker logs node2
+  365  sudo docker rm node2
+  366  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  367  vi Dockerfile 
+  368  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  369  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  370  sudo docker logs node2
+  371  vi Dockerfile 
+  372  sudo docker rm node2
+  373  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  374  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  375  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  376  sudo docker logs node2
+  377  sudo docker rm node2
+  378  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  379  vi Dockerfile 
+  380  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  381  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  382  sudo docker logs node2
+  383  sudo docker rm node2
+  384  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  385  vi Dockerfile 
+  386  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  387  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  388  sudo docker logs node2
+  389  vi Dockerfile 
+  390  sudo docker rm node2
+  391  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  392  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  393  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  394  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  395  sudo docker ps -a
+  396  sudo docker logs node2
+  397  vi Dockerfile 
+  398  sudo docker rm node2
+  399  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  400  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  401  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  402  sudo docker ps -a
+  403  sudo docker exec -it node2 sh
+  404  sudo docker stop node2
+  405  sudo docker rm node2
+  406  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  407  vi Dockerfile 
+  408  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  409  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  410  sudo docker logs node2
+  411  sudo docker ps -a
+  412  sudo docker logs node2
+  413  sudo docker cp node:/tmp .
+  414  sudo docker cp node2:/tmp .
+  415  ls
+  416  cd tmp/
+  417  ls
+  418  cat crontab-ui.log 
+  419  sudo docker rm node2
+  420  ls ..
+  421  cd ..
+  422  rm tmp/
+  423  rm -rf tmp/
+  424  sudo rm -rf tmp/
+  425  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  426  vi Dockerfile 
+  427  sudo docker build -t tinyorb/armv8_crontab-ui:v1 .
+  428  sudo docker run -d --name=node2 -p 8000:8000 tinyorb/armv8_crontab-ui:v1
+  429  sudo docker ps -a
+  430  sudo docker exec -it node2 sh
+  431  ls
+  432  cd ..
+  433  ls
+  434  sudo docker save -o crontab-ui_arm64v8.tar tinyorb/armv8_crontab-ui:v1
+  435  sudo docker login
+  436  sudo docker push tinyorb/armv8_crontab-ui:v1
+  437  ls
+  438  sudo docker 777 crontab-ui_arm64v8.tar 
+  439  sudo chmod 777 crontab-ui_arm64v8.tar 
+  440  cat crontab-ui_arm64v8/Dockerfile 
+  441  history
+  442  sudo docker exec -it node2 sh
+  443  exit
+  444  sudo docker rm node
+  445  sudo docker images
+  446  sudo docker save -o arm64v8_crontab-ui.tar tinyorb/armv8_crontab-ui:v1
+  447  ls
+  448  sudo docker exec -it node2 bash
+  449  sudo docker exec -it node2 sh
+  450  sudo docker stop node2
+  451  sudo docker rm node2
+  452  sudo docker images
+  453  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  454  sudo docker images
+  455  ls
+  456  rm arm64v8_crontab-ui.tar
+  457  ls
+  458  sudo docker rm node2
+  459  sudo docker image rm tinyorb/armv8_crontab-ui:v1
+  460  vi test.sh
+  461  chmod +x test.sh 
+  462  ./test.sh 
+  463  vi test.sh
+  464  ./test.sh 
+  465  vi test.sh
+  466  ./test.sh 
+  467  cat /tmp/out.txt 
+  468  vi test.sh
+  469  ./test.sh 
+  470  cat /tmp/out.txt 
+  471  vi test.sh
+  472  ./test.sh 
+  473  cat /tmp/out.txt 
+  474  echo "" > /tmp/out.txt 
+  475  cat /tmp/out.txt 
+  476  ./test.sh 
+  477  cat /tmp/out.txt 
+  478  vi test.sh
+  479  uname -an
+  480  cat /etc/lsb-release 
+  481  exit
+  482  ls
+  483  cd crontab-ui_arm64v8/
+  484  ls
+  485  cd ..
+  486  mkdir pufm_arm64v8
+  487  cd pufm_arm64v8/
+  488  ls
+  489  cd stack/
+  490  ls
+  491  cat Dockerfile 
+  492  ls
+  493  sudo docker images
+  494  sudo docker ps -a
+  495  sudo docker image rm 1e4e88fce0d0
+  496  ls
+  497  cat build.sh 
+  498  chmod +x build.sh 
+  499  ./build.sh push
+  500  ip addr ls
+  501  ls
+  502  cat pufm_arm64v8/
+  503  cat pufm_arm64v8/stack/Dockerfile 
+  504  cd pufm_arm64v8/stack/
+  505  ls
+  506  ./build.sh 
+  507  cd ../..
+  508  mkdir ca_utils
+  509  cd ca_utils/
+  510  sudo docker ps -a
+  511  sudo docker images
+  512  sudo docker push tinyorb/arm64v8_pufm:v1.1
+  513  ls
+  514  mv Dockerfile_arm64v8 Dockerfile
+  515  ls
+  516  vi build.sh
+  517  cp build.sh run.sh
+  518  vi run.sh 
+  519  mv run.sh build.sh_ne
+  520  mv build.sh run.sh
+  521  mv build.sh_ne build.sh
+  522  vi run.sh 
+  523  vi build.sh 
+  524  ls
+  525  chmod +x build.sh 
+  526  chmod +x run.sh 
+  527  ./build.sh 
+  528  vi Dockerfile 
+  529  ./build.sh 
+  530  sudo docker ps -a
+  531  sudo docker images
+  532  ./run.sh 
+  533  sudo docker ps -a
+  534  sudo ufw status
+  535  ip addr ls
+  536  cat /etc/netplan/50-cloud-init.yaml
+  537  sudo cat /etc/netplan/50-cloud-init.yaml
+  538  sudo docker ps -a
+  539  ls
+  540  sudo docker exec -it node2 bash
+  541  sudo docker exec -it node2 sh
+  542  sudo docker images
+  543  ls
+  544  cd ca_utils/
+  545  ls
+  546  cat Dockerfile 
+  547  ls
+  548  cat crontab-ui_arm64v8
+  549  cat crontab-ui_arm64v8/Dockerfile 
+  550  sudo docker ps -a
+  551  sudo docker node2
+  552  sudo docker start node2
+  553  sudo docker exec -it node2 sh
+  554  vi crontab-ui_arm64v8/Dockerfile 
+  555  mv crontab-ui_arm64v8/Dockerfile crontab-ui_arm64v8/DockerfileV2
+  556  cd crontab-ui_arm64v8/
+  557  ls
+  558  cp DockerfileV2 Dockerfile
+  559  cd ..
+  560  ls
+  561  cat node25/
+  562  ls
+  563  cd node25/
+  564  ls
+  565  cd crontab-ui/
+  566  ls
+  567  exit
+  568  ip addr ls
+  569  ls
+  570  sudo docker images
+  571  ls
+  572  sudo docker save -o ca_utils_arm64v8.tar
+  573  sudo docker save -o ca_utils_arm64v8.tar ca_utils
+  574  sudo chmod 777 ca_utils_arm64v8.tar
+  575  ls
+  576  sudo docker images
+  577  sudo docker save -o arm64v8_pufm_v1.1 tinyorb/arm64v8_pufm:v1.1
+  578  sudo chmod 777 arm64v8_pufm_v1.1
+  579  ls
+  580  mkdir docker_openblas
+  581  cd docker_openblas/
+  582  vi Dockerfile
+  583  vi build.sh
+  584  ls
+  585  chmod +x build.sh 
+  586  ./build.sh 
+  587  sudo docker images
+  588  sudo docker tag tinyorb/openblas:dev_base tinyorb/arm64v8_openblas:dev_base
+  589  sudo docker image rm tinyorb/openblas:dev_base 
+  590  sudo docker images
+  591  sudo docker save -o arm64v8_openblas_dev_base.tar tinyorb/arm64v8_openblas:dev_base
+  592  ls
+  593  sudo docker ps -a
+  594  sudo docker images
+  595  sudo docker pull arm64v8/ubuntu:noble
+  596  df -h
+  597  sudo fdisk -l
+  598  sudo poweroff
+  599  ls
+  600  ls -las
+  601  sudo docker images
+  602  sudo docker save -o arm64v8_openblas_dev_base.tar tinyorb/arm64v8_openblas:dev_base
+  603  sudo chmod 777 arm64v8_openblas_dev_base.tar 
+  604  ls
+  605  cd docker_openblas/
+  606  vat Dockerfile 
+  607  cat Dockerfile 
+  608  cd ..
+  609  ls
+  610  exit
+  611  sudo ip route add 192.168.36.0 dev eth0
+  612  ssh ubuntu@192.168.36.3
+  613  ls
+  614  mkdir opencv2
+  615  cd opencv2/
+  616  ls
+  617  mkdir opencv2
+  618  ssh ubuntu@192.168.36.3
+  619  cd ..
+  620  mkdir mesa_utils
+  621  cd mesa_utils/
+  622  ls
+  623  apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances <your-package-here> | grep "^\w" | sort -u)
+  624  apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances mesa-utils | grep "^\w" | sort -u)
+  625  sudo poweroff
+  626  hostname
+  627  sudo cat /etc/netplan/50-cloud-init.yaml
+  628  sudo cp /etc/netplan/50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml-bak-static-wifi
+  629  sudo vi /etc/netplan/50-cloud-init.yaml
+  630  sudo poweroff
+  631  sudo docker ps -a
+  632  ls
+  633  cd crontab_db/
+  634  ls
+  635  cat env.db 
+  636  cat crontab.db 
+  637  cd ..
+  638  ls
+  639  hostname
+  640  ip addr ls
+  641  ls
+  642  lshw -short
+  643  cd crontab-ui_arm64v8/
+  644  ls
+  645  cat DockerfileV2 
+  646  cat Dockerfile
+  647  ls
+  648  cd ..
+  649  ls
+  650  sudo docker ps -a
+  651  history
+ubuntu@ubuntu:~$ apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances mesa-utils | grep "^\w" | sort -u)
