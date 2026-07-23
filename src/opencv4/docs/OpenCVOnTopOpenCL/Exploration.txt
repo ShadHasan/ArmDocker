@@ -1,7 +1,15 @@
 ### create separate build directory
 
+opencv 4.x source code: https://github.com/opencv/opencv/tree/4.x
+Installation reference: 
+https://docs.opencv.org/4.13.0/d0/d3d/tutorial_general_install.html
+https://docs.opencv.org/4.13.0/db/d05/tutorial_config_reference.html#tutorial_config_reference_intro
+
+Please note: 4.13.0 is slightly optimized for python and we are not using python.
+
+
 # Create build directory
-mkdir -p build && cd build
+mkdir -p build_dir && cd build_dir
 
 ### Configuration generation:
 $> export OPENCV_DOWNLOAD_PATH=/tmp/opencv-cache

@@ -5,8 +5,7 @@
 FROM arm64v8/ubuntu:noble
 RUN apt update -y
 RUN apt install -y git build-essential cmake make
-RUN echo "/usr/lib/libmali-g610.so" | sudo tee
-/etc/OpenCL/vendors/mali.icd
+RUN echo "/usr/lib/libmali-g610.so" | sudo tee /etc/OpenCL/vendors/mali.icd
 
 Note: we haven't used any build tool in below exploration
 
