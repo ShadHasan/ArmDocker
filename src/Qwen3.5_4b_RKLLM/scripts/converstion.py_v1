@@ -1,0 +1,122 @@
+import ctypes
+import os
+import sys
+
+# 1. Expand system file limits for massive model memory mapping
+os.system("ulimit -HSn 102400")
+
+# 2. Define RKLLM v1.3.0 Output Structs for Callback Parsing
+class RKLLMResultLastHiddenLayer(ctypes.Structure):
+    _fields_ = [("embd_data", ctypes.c_void_p), ("embd_size", ctypes.c_uint64)]
+
+class RKLLMResultLogits(ctypes.Structure):
+    _fields_ = [("logits_data", ctypes.c_void_p), ("logits_size", ctypes.c_uint64)]
+
+class RKLLMPerfStat(ctypes.Structure):
+    _fields_ = [
+        ("prompt_tokens", ctypes.c_int),
+        ("completion_tokens", ctypes.c_int),
+        ("prompt_time", ctypes.c_float),
+        ("completion_time", ctypes.c_float)
+    ]
+
+class RKLLMResult(ctypes.Structure):
+    _fields_ = [
+        ("text", ctypes.c_char_p),         # The raw generated token string
+        ("token_id", ctypes.c_int),
+        ("last_hidden_layer", RKLLMResultLastHiddenLayer),
+        ("logits", RKLLMResultLogits),
+        ("perf", RKLLMPerfStat)
+    ]
+
+# 3. Define RKLLM v1.3.0 Input Execution Structs
+class RKLLMInput(ctypes.Structure):
+    _fields_ = [
+        ("type", ctypes.c_int),            # 0 = PROMPT type input
+        ("prompt", ctypes.c_char_p),       # Binary string data
+        ("tokens", ctypes.c_void_p),
+        ("num_tokens", ctypes.c_int)
+    ]
+
+class RKLLMParam(ctypes.Structure):
+    _fields_ = [("opaque_buffer", ctypes.c_uint8 * 1024)]
+
+# 4. Text Stream Callback Definition
+# Prototype matching rkllm.h: void callback(RKLLMResult* result, void* userdata, int state)
+# state: 2 = Generation finished
+CALLBACK_TYPE = ctypes.CFUNCTYPE(None, ctypes.POINTER(RKLLMResult), ctypes.c_void_p, ctypes.c_int)
+
+def text_stream_callback(result_pointer, userdata, state):
+    if result_pointer and result_pointer.contents.text:
+        # Extract and print token characters smoothly from inside the C-struct mapping
+        token_string = result_pointer.contents.text.decode('utf-8', errors='ignore')
+        print(token_string, end="", flush=True)
+
+# Secure a hard reference to the callback tracking pointer to prevent Garbage Collection loops
+c_callback = CALLBACK_TYPE(text_stream_callback)
+
+# 5. Load and Map functions cleanly
+try:
+    librkllm = ctypes.CDLL("librkllmrt.so")
+except OSError as e:
+    print(f"Driver library mismatch or missing path alignment:\n{e}")
+    exit(1)
+
+librkllm.rkllm_createDefaultParam.argtypes = []
+librkllm.rkllm_createDefaultParam.restype = RKLLMParam
+
+librkllm.rkllm_init.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(RKLLMParam), ctypes.c_void_p]
+librkllm.rkllm_init.restype = ctypes.c_int
+
+# rkllm_run(void* handle, RKLLMInput* input, void* userdata)
+librkllm.rkllm_run.argtypes = [ctypes.c_void_p, ctypes.POINTER(RKLLMInput), ctypes.c_void_p]
+librkllm.rkllm_run.restype = ctypes.c_int
+
+librkllm.rkllm_destroy.argtypes = [ctypes.c_void_p]
+librkllm.rkllm_destroy.restype = ctypes.c_int
+
+# 6. Build base configuration properties
+main_config = librkllm.rkllm_createDefaultParam()
+model_path_bytes = b"./qwen3_5_4b.rkllm"
+path_pointer = ctypes.c_char_p(model_path_bytes)
+ctypes.memmove(ctypes.byref(main_config), ctypes.byref(path_pointer), ctypes.sizeof(ctypes.c_char_p))
+
+# 7. Initialize model 
+model_handle = ctypes.c_void_p()
+print("Loading model onto the 3 NPU cores... Please wait.")
+ret = librkllm.rkllm_init(ctypes.byref(model_handle), ctypes.byref(main_config), c_callback)
+
+if ret != 0:
+    print(f"Initialization sequence aborted by hardware. Code: {ret}")
+    exit(ret)
+print("Model loaded successfully into hardware blocks!\n" + "="*50)
+
+# 8. Interactive loop
+try:
+    while True:
+        user_input = input("\nYou: ")
+        if user_input.lower() in ['exit', 'quit']:
+            break
+        if not user_input.strip():
+            continue
+            
+        formatted_prompt = f"<|im_start|>user\n{user_input}<|im_end|>\n<|im_start|>assistant\n"
+        print("\nQwen: ", end="", flush=True)
+        
+        # Instantiate the correct Input configuration parameter block
+        input_data = RKLLMInput(
+            type=0,  # 0 indicates standard raw prompt text generation execution 
+            prompt=formatted_prompt.encode('utf-8'),
+            tokens=None,
+            num_tokens=0
+        )
+        
+        # Launch inference cleanly
+        librkllm.rkllm_run(model_handle, ctypes.byref(input_data), None)
+        print() 
+
+finally:
+    print("\nUnloading model from NPU memory...")
+    librkllm.rkllm_destroy(model_handle)
+    print("Session closed cleanly.")
+
