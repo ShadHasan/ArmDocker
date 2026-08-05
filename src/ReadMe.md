@@ -1,3 +1,11 @@
+
+## Hardware and pre-requisite
+
+Hardware: Orange Pi 5 Pro
+OS: ubuntu (https://joshua-riek.github.io/ubuntu-rockchip-download/)
+
+
+
 ## Connect Bash on run using docker command
 
 ```
