@@ -32,10 +32,52 @@ In our case, we are install ipykernel within virtual environment
 4. Install notebook
 $> JupyterEnv/bin/python3 -m pip install notebook
 
-5. Start jupyter notebook
+5. Register ipykernel to same virtual environment
+$> JupyterEnv/bin/python3 -m ipykernel install --user --name=JupyterEnv --display-name="pythonJupyterENV"
+
+6. Start jupyter notebook
 $> JupyterEnv/bin/python3 -m jupyter notebook
 
 To start at root host use like below:
 `JupyterEnv/bin/python3 -m jupyter notebook --ip=0.0.0.0 --allow-root`
 
+
+Notedown the url, let say:
+	http://127.0.0.1:8888/tree?token=96c1704a17811cf7362274e66e8580cee18578b91adadf46
+
+7. Go to browser
+Navigate to above url
+
+8. open notebook and select kernel as per step 5 registeration.
+
+
+9. You can install try pip package as below:
+```
+#@title Install required libraries
+
+!pip install google-ml-edu==0.1.3 \
+  keras~=3.8.0 \
+  matplotlib~=3.10.0 \
+  numpy~=2.0.0 \
+  pandas~=2.2.0 \
+  tensorflow~=2.18.0
+
+print('\n\nAll requirements successfully installed.') 
+
+```
+
+If you run in error like `jupyter error: externally-managed-environment`
+Then run like below replace `!` with `%`
+```
+#@title Install required libraries
+
+%pip install google-ml-edu==0.1.3 \
+  keras~=3.8.0 \
+  matplotlib~=3.10.0 \
+  numpy~=2.0.0 \
+  pandas~=2.2.0 \
+  tensorflow~=2.18.0
+
+print('\n\nAll requirements successfully installed.')
+```
 
