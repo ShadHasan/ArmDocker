@@ -32,3 +32,9 @@ sudo pip install glances
 sudo glances
 ```
 
+## To check NPU utilization
+
+```
+watch sudo cat /sys/kernel/debug/rknpu/load
+```
+

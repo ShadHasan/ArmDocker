@@ -1,0 +1,23 @@
+## Hugging face
+
+https://www.geeksforgeeks.org/artificial-intelligence/hugging-face-tutorial/
+
+<p>Hugging Face is an open-source AI platform that provides pre-trained models, datasets and tools to build Natural Language Processing, computer vision, audio and generative AI applications. It helps developers to use AI models without training everything from scratch.</p>
+
+
+## Transformers in Machine Learning
+
+https://www.geeksforgeeks.org/machine-learning/getting-started-with-transformers/
+
+## Introduction to Recurrent Neural Networks
+
+https://www.geeksforgeeks.org/machine-learning/introduction-to-recurrent-neural-network/
+
+## Self attention in NLP
+
+https://www.geeksforgeeks.org/nlp/self-attention-in-nlp/
+
+## Misc 1
+
+https://codezup.com/category/machine-learning/
+

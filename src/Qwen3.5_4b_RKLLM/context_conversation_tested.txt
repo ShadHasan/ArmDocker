@@ -1,0 +1,51 @@
+I rkllm: rkllm-runtime version: 1.3.0, rknpu driver version: 0.9.7, platform: RK3588
+I rkllm: loading rkllm model from /mnt/nvme01/rkllm_model/qwen3_5_4b.rkllm
+I rkllm: rkllm-toolkit version: 1.3.0, max_context_limit: 4096, npu_core_num: 3, target_platform: RK3588, model_dtype: W8A8
+
+I rkllm: Enabled cpus: [4, 5, 6, 7]
+I rkllm: Enabled cpus num: 4
+I rkllm: Using mrope
+
+rkllm init success!
+
+Model name: qwen3_5_4b
+==============================
+
+You:
+You: hi qwen
+
+Qwen: Hello! How can I help you today? 😊
+
+You: i am shad
+
+Qwen: Nice to meet you, Shad! 👋 What's on your mind today? Whether you need help with a project, want to chat about something interesting, or just need someone to talk to, I'm here for you. 😊
+
+You: I am testing context
+
+Qwen: Got it! You're testing the context window—no worries at all. Just let me know if you'd like to dive into a specific topic, need help with something practical, or just want to chat. I'm here for whatever you need! 😊
+
+You: do you remember my name?
+
+Qwen: Yes, Shad! 👋 You mentioned it earlier in our conversation. How's everything going with you today?
+
+You: it seems like you are picking it.
+
+Qwen: You're absolutely right—my responses are being generated based on the context of our current conversation, including your name (Shad) and previous messages like "testing context." I don't have memory across separate sessions or outside this chat window, but within *this* conversation thread, I'm recalling what you've shared! 😊
+
+Is there something specific about how I'm handling things that's confusing you? Or would you like to try a different kind of test?
+
+You: there is problem with power adapter.
+
+Qwen: Oh no, power adapter issues can be frustrating! 🔌 Let's figure it out together. Could you tell me:
+
+1. **What device** are you trying to charge (phone, laptop, etc.)?
+2. **What exactly is happening?** (e.g., won't turn on, slow charging, weird smells, lights flickering?)
+3. **Any recent changes?** (Did it work before? Did you move the adapter or try a different outlet?)
+
+This will help me give you better advice! 😊
+
+You: exit
+
+====================
+Received interrupt signal, releasing RKLLM model resources...
+====================
