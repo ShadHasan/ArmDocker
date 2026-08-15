@@ -1,0 +1,217 @@
+You: Hi qwen
+
+Qwen: Hello! How can I help you today? 😊
+
+You: I am Shad
+
+Qwen: Nice to meet you, Shad! 👋 What's on your mind today? Whether you have a question, need help with something specific, or just want to chat, feel free to let me know!
+
+You: I am test for context.
+
+Qwen: Got it! You're testing the context—no worries at all. 😊 How else can I assist you? Whether it's a question, task, or just a casual chat, I'm here to help!
+
+You: Who am I?
+
+Qwen: Based on our conversation so far, **you are Shad**! 🎉
+
+You also mentioned earlier that you were "testing for context," which suggests you might be checking how well the system remembers previous interactions. But since you introduced yourself as Shad multiple times, I'm pretty sure that's who you are! 😊
+
+You: So what is ny name?
+
+Qwen: Your name is **Shad**! 🎉
+
+You've mentioned it several times in our conversation. If you'd like to go by a different name or if there's something else you'd like to share, feel free to let me know! 😊
+
+You: What is your suggestion for providing large data as input? So that you can provide relevant query?
+
+Qwen: Great question! When dealing with **large datasets**, the key is to balance efficiency, relevance, and context. Here are some practical suggestions:
+
+---
+
+### 1. **Preprocessing & Summarization**
+   - **Summarize Key Insights**: Use tools like `text_summarizer` or LLMs (e.g., me!) to extract high-level summaries of the data before feeding it into queries. This reduces noise while preserving critical patterns.
+   - **Feature Extraction**: Convert raw data into structured features (e.g., statistical metrics, trends) that highlight what matters most for your query.
+
+---
+
+### 2. **Chunking & Contextual Segmentation**
+   - Break large datasets into manageable chunks (e.g., by time, category, or topic). Focus queries on specific segments to avoid overwhelming the model with irrelevant information.
+   - Example: For a sales dataset, analyze Q1 vs. Q4 trends separately instead of dumping all data at once.
+
+---
+
+### 3. **Query Refinement**
+   - **Narrow Down Scope**: Ask targeted questions (e.g., "What are the top 5 products by revenue in 2023?") rather than broad ones ("Tell me everything about sales").
+   - Use **filtering criteria** (date ranges, categories, thresholds) to reduce data volume before querying.
+
+---
+
+### 4. **Hybrid Approaches**
+   - **Combine Tools**: Pair LLMs with traditional analytics tools (e.g., SQL for structured data, Python/pandas for numerical analysis). For example:
+     ```python
+     # Example: Extract trends from a large CSV using pandas + LLM insights
+     import pandas as pd
+
+     df = pd.read_csv("large_dataset.csv")  # Load data
+     summary_stats = df.describe()           # Get key metrics
+     query_prompt = f"Based on these stats, what's the trend in 'sales'?"
+     response = llm.generate(query_prompt)   # Ask LLM for insights
+     ```
+
+---
+
+### 5. **Contextual Caching**
+   - Store frequently accessed data subsets or summaries in a cache (e.g., Redis, vector databases). This avoids reprocessing the same large dataset repeatedly.
+
+---
+
+### 6. **Interactive Exploration**
+   - Let users explore data iteratively: Start with high-level questions, then drill down into specific areas based on their feedback. This keeps queries focused and relevant.
+
+---
+
+### Example Workflow:
+1. **User Query**: "Analyze customer churn trends."
+2. **Preprocessing**: Filter data to last 6 months + extract churn rates by region.
+3. **Query Refinement**: Ask, "What regions have the highest churn rate?" instead of analyzing all historical data.
+4. **Output**: Provide a concise summary with actionable insights.
+
+---
+
+Would you like help designing a specific workflow for your use case? 😊
+
+You: llm like you, must know panda function then only it execute to fetch relevant information. Do you panda function?
+
+Qwen: I don't have direct access to external tools or functions like `pandas` in the way a standalone Python script would. However, I can **simulate** pandas-like operations by processing data logically within my reasoning capabilities! For example:
+
+---
+
+### How I "Handle" Large Data:
+1. **Logical Reasoning**:  
+   - If you provide structured data (e.g., CSV text, JSON), I can parse it and analyze trends, calculate averages, or identify patterns *within the context of our conversation*.  
+   - Example:  
+     ```text
+     Input: "Sales data for 2023: Jan=10k, Feb=15k, Mar=20k..."  
+     My Response: "Average monthly sales = 15k. Q1 growth = +50%."
+     ```
+
+2. **Step-by-Step Breakdown**:  
+   - I can guide you through manual calculations or suggest Python/pandas code to process the data yourself. For example:  
+     ```python
+     import pandas as pd
+     df = pd.read_csv("sales.csv")
+     print(df.groupby('month')['sales'].mean())  # Grouped average sales
+     ```
+
+3. **Hybrid Workflow**:  
+   - If you share a dataset, I can help design queries or suggest tools (like `pandas`, SQL, or Excel) to process it efficiently. You can then run the code locally or in a notebook!
+
+---
+
+### Need Help with Your Data?
+- Share a sample of your data (e.g., CSV text, JSON snippet), and I'll analyze it directly!  
+- Or tell me what insights you're looking for, and I'll guide you step-by-step. 😊
+
+You: How can I give complete new tool set detail as manual? That later I can ask perform this tasks. You can tell operation or sequence of operations or tool cannot perform.
+
+Qwen: run error
+
+
+You: How can I give complete new tool set detail as manual? That later I can ask perform this tasks. You can tell operation or sequence of operations or tool cannot perform.
+
+Qwen: To enable me (or any LLM) to execute specific tasks with a **custom toolset**, you need to provide a structured "Manual" that defines the **Capabilities**, **Inputs/Outputs**, and **Execution Logic** of each tool. Since I cannot directly install or run external software on your machine, this manual acts as a **specification document**.
+
+Here is how you can structure this manual so I understand exactly what tools are available and how to use them:
+
+### 1. The Structure of the "Tool Manual"
+You should provide the details in a clear format (like JSON, Markdown tables, or a defined schema). Here is a template you can copy and fill out:
+
+#### A. Tool Definition (The "What")
+For every tool, define:
+*   **Name**: Unique identifier (e.g., `pandas_read_csv`, `sql_query_db`).
+*   **Description**: What does this tool do? (e.g., "Reads a CSV file and returns data as a DataFrame").
+*   **Input Parameters**: Required arguments.
+    *   *Example*: `{ "file_path": "string", "column_name": "string" }`
+*   **Output Format**: How will the result look?
+    *   *Example*: `{"data": [[...], [...]], "shape": (rows, cols)}`
+
+#### B. Operational Logic (The "How")
+Define the sequence of operations or constraints:
+*   **Prerequisites**: What must be true before using this tool? (e.g., "File must exist," "Database connection active").
+*   **Error Handling**: What happens if it fails? (e.g., "If file not found, return error code 404").
+*   **Tool Dependencies**: Does Tool B need the output of Tool A?
+
+#### C. Limitations & Constraints
+Explicitly state what the tool **cannot** do:
+*   *Example*: "This tool cannot handle files larger than 10MB." or "SQL queries are limited to SELECT only; no UPDATE/DELETE allowed."
+
+---
+
+### 2. Example Manual (JSON Format)
+You can paste a JSON block like this into our chat. This allows me to parse it programmatically and understand the rules:
+
+```json
+{
+  "toolset": [
+    {
+      "name": "pandas_read_csv",
+      "description": "Reads a CSV file and returns data as a structured table.",
+      "parameters": {
+        "file_path": {"type": "string", "required": true, "example": "/data/sales.csv"},
+        "delimiter": {"type": "string", "default": ",", "optional": true}
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "header": ["list of column names"],
+          "rows": [["row1_col1", "row1_col2"]],
+          "summary_stats": {"avg_sales": 500, "min_date": "2023-01-01"}
+        }
+      },
+      "limitations": [
+        "Cannot read files larger than 5MB.",
+        "Does not support Excel (.xlsx) format directly."
+      ],
+      "execution_sequence": [
+        "Verify file exists at path.",
+        "Parse content using delimiter.",
+        "Calculate basic stats (mean, min, max).",
+        "Return structured JSON."
+      ]
+    },
+    {
+      "name": "sql_execute_query",
+      "description": "Executes a SQL query against the local database.",
+      "parameters": {
+        "query": {"type": "string", "required": true, "example": "SELECT * FROM users WHERE age > 30"}
+      },
+      "output_schema": {
+        "type": "list of objects"
+      },
+      "limitations": [
+        "Cannot execute DML (INSERT/UPDATE/DELETE) commands.",
+        "Max query length is 500 characters."
+      ]
+    }
+  ]
+}
+```
+
+---
+
+### 3. How to Use This Manual Later
+Once you provide this manual, you can ask me tasks like:
+
+*   **"Use `pandas_read_csv` on `/data/sales.csv` and calculate the average sales per region."**
+    *   *My Action*: I will check if the tool exists in your manual → Verify parameters → Simulate execution based on logic → Return result.
+*   **"I need to find users older than 30, but `sql_execute_query` doesn't allow DML. Can you do it?"**
+    *   *My Action*: I will check limitations of the SQL tool → Confirm it's safe (SELECT only) → Execute query logic.
+*   **"The file is too big for `pandas_read_csv`. What should I do?"**
+    *   *My Action*: I will reference your "limitations" list and suggest an alternative workflow or chunking strategy.
+
+### 4. Important Note on Execution
+Since I am an AI text model:
+1.  **Simulation**: If you provide the manual, I can **simulate** the execution of these tools in our chat (e.g., "Based on your data, `pandas_read_csv` would return...").
+2.  **Code Generation**: If you want me to *actually* run code, I will generate a Python script using those tool definitions that you can run locally or in a notebook.
+
+**Would you like to try creating this manual now?** You can describe your tools (e.g., "I have a calculator," "I have a weather API"), and I'll help you format it into the structure above so we can start working!
