@@ -1,15 +1,57 @@
-#!/bin/bash
+import os
+import asyncio
+import websocket
+import threading
+import logging
 
-echo "This script is valid for debian based linux distros."
+logging.basicConfig(
+	level=logging.DEBUG,
+	format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
+	handlers=[
+		logging.FileHandler(os.environ["LOGPATH"]),
+		logging.StreamHandler()
+	]
+)
 
 
-SERVICE_CLIENT_PATH=""
+async def exec_run(argument):
+	await asyncio.sleep(1)
+	return f"Responding {argument}"
 
-SERVICE_CLIENT_SERVICE_PATH=""  # This generally reside within init.d
+def process_and_send(ws, message):
+	result = asyncio.run(exec_run())
+	ws.send(result)
+	logger.info("Successfully sent")
 
-# Creating virtual environment
+def on_message(ws, message):
+    logger.info(f"Received: {message}")
+    threading.Thread(target=process_and_send, args=(ws, message), daemon=True).start()
 
-# SCP the service-client, run script script at ${SERVICE_CLIENT_PATH}
+def on_error(ws, error):
+    logger.info(f"Error: {error}")
 
-# service-client.py: actually running service-client
-# run.sh take care of loading, activating python virtual environment in which service-client.py will be running.
+def on_close(ws, close_status_code, close_msg):
+    logger.info("### Connection Closed ###")
+
+def on_open(ws):
+    logger.info("Opened connection successfully.")
+    # Send a message right after opening the connection
+    ws.send("Hello, Server!")
+
+if __name__ == "__main__":
+	logger = logging.getLogger(__name__)
+	logger.info("This goes to both the file and console")
+    # Target URL
+    uri = os.environ["SIGNALSERVER"]
+    
+    # Create the persistent application connection
+    ws = websocket.WebSocketApp(
+        uri,
+        on_open=on_open,
+        on_message=on_message,
+        on_error=on_error,
+        on_close=on_close
+    )
+    
+    # Keep the connection alive indefinitely
+    ws.run_forever()

@@ -1,0 +1,22 @@
+[Unit]
+Description=Service Client Broker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/service_client
+
+ExecStart=/home/ubuntu/service_client/bin/python3 /home/ubuntu/service_client/service_client.py
+
+Restart=always
+RestartSec=5
+
+Environment="PYTHONUNBUFFERED=1"
+Environment="SIGNALSERVER="
+Environment="LOGPATH=/var/log/service_client.log"
+
+[Install]
+WantedBy=multi-user.target
