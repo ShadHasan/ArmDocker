@@ -1,5 +1,5 @@
 [Unit]
-Description=Service Client Broker
+Description="Service Client Broker"
 After=network-online.target
 Wants=network-online.target
 
@@ -15,7 +15,7 @@ Restart=always
 RestartSec=5
 
 Environment="PYTHONUNBUFFERED=1"
-Environment="SIGNALSERVER="
+Environment="SIGNALSERVER=wss://localhost"
 Environment="LOGPATH=/var/log/service_client.log"
 
 [Install]
