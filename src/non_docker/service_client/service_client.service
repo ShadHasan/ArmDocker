@@ -15,7 +15,7 @@ Restart=always
 RestartSec=5
 
 Environment="PYTHONUNBUFFERED=1"
-Environment="SIGNALSERVER=wss://localhost"
+Environment="SIGNALSERVER="
 Environment="LOGPATH=/var/log/service_client.log"
 
 [Install]
