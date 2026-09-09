@@ -1,4 +1,5 @@
 import os
+import uuid
 import ssl
 import json
 import asyncio
@@ -20,6 +21,7 @@ def ws_send_json(ws, msg):
 
 async def exec_run(argument):
 	await asyncio.sleep(1)
+	logger.debug("Exeuting service client request, {}".format(argument))
 	return {"directive": "service_client_reply"}
 
 def process_and_send(ws, message):
@@ -31,10 +33,10 @@ def process_and_send(ws, message):
 		logger.info("Successfully sent")
 	elif directive == "echo":
 		logger.info(f"Echo received: {message['msg']}")
-	if directive == "service_client_replied":
+	if signal_response == "service_client_replied":
 		logger.info(f"Service reply signal ack: {message['status']}")
-	
-	
+	elif signal_response == "socket_mapped":
+		logger.info("Service service registered")
 
 def on_message(ws, message):
 	logger.info(f"Received: {message}")
@@ -49,7 +51,9 @@ def on_close(ws, close_status_code, close_msg):
 def on_open(ws):
 	logger.info("Opened connection successfully.")
 	# Send a message right after opening the connection
-	ws_send_json(ws, {"directive", "echo", "msg": "Hello, Server!"})
+	ws_send_json(ws, {"directive": "echo", "msg": "Hello, Server!"})
+	ws_send_json(ws, {"directive": "my_altname", "altname": "service_pi5b", "type": "service"})
+	
 
 if __name__ == "__main__":
 	logger = logging.getLogger(__name__)
