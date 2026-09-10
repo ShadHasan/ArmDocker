@@ -21,12 +21,15 @@ def ws_send_json(ws, msg):
 
 async def exec_run(argument):
 	await asyncio.sleep(1)
-	logger.debug("Exeuting service client request, {}".format(argument))
-	return {"directive": "service_client_reply"}
+	logger.debug("Executing service client request, {}".format(argument))
+	argument["directive"] = "service_client_reply"
+	argument["result"] = ""
+	return argument
 
 def process_and_send(ws, message):
 	directive = message.get("directive")
 	signal_response = message.get("signal_response")
+	logger.debug("Signal directive/response {} {}".format(directive, signal_response))
 	if directive == "request_service_client":
 		result = asyncio.run(exec_run(message))
 		ws_send_json(ws, result)
@@ -40,7 +43,8 @@ def process_and_send(ws, message):
 
 def on_message(ws, message):
 	logger.info(f"Received: {message}")
-	threading.Thread(target=process_and_send, args=(ws, message), daemon=True).start()
+	message = json.loads(message)
+	threading.Thread(target=process_and_send, args=(ws, message,), daemon=True).start()
 
 def on_error(ws, error):
 	logger.info(f"Error: {error}")
