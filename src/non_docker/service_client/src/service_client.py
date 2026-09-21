@@ -26,6 +26,47 @@ def format_media(pc_uuid, media_type, id, binary):
 	meta = "{}::{}::{}::{}".format(pc_uuid, media_type, id, "--==--")
 	return meta.encode() + binary
 
+def get_render(req_data):
+	return {}
+	
+def get_data(req_data):
+	return {}
+	
+def get_schema(req_data):
+	return {}
+	
+def get_ui_details(req_data):
+	return {}
+	
+def send_binary_to_socket(req_data):
+	result = {}
+	result["status"] = "ok"
+	return result
+
+def process_action(req_data):
+	action_functions = {
+		"ui_details": {
+			"callback": get_ui_details
+		},
+		"dataType": {
+			"callback": get_schema
+		},
+		"binary_data": {
+			"callback": send_binary_to_socket
+		},
+		"data": {
+			"callback": get_data
+		},
+		"render": {
+			"callback": get_render
+		}
+	}
+	
+	if req_data.get("action") and action_functions.get(req_data["action"]) is not None:
+		return action_functions[req_data["action"]]["callback"](req_data)
+	else:
+		return {"error": "Unkown action {}".format(req_data.get("action"))}
+
 
 def ws_send_json(ws, msg):
 	ws.send(json.dumps(msg))
