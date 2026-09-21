@@ -7,6 +7,7 @@ import websocket
 import threading
 import logging
 
+# Service configuration related
 logging.basicConfig(
 	level=logging.DEBUG,
 	format="%(asctime)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s",
@@ -15,6 +16,16 @@ logging.basicConfig(
 		logging.StreamHandler()
 	]
 )
+
+## Action response related
+# Usage::
+#	f = open(os.path.join("<media_path>"), "rb")
+#	binary_img = f.read()
+#	formatted_media = format_media("8383-892-8938493-998", "png", "owner_image", binary_img)
+def format_media(pc_uuid, media_type, id, binary):
+	meta = "{}::{}::{}::{}".format(pc_uuid, media_type, id, "--==--")
+	return meta.encode() + binary
+
 
 def ws_send_json(ws, msg):
 	ws.send(json.dumps(msg))
