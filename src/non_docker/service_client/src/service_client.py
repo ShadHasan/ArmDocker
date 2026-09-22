@@ -21,9 +21,11 @@ logging.basicConfig(
 # Usage::
 #	f = open(os.path.join("<media_path>"), "rb")
 #	binary_img = f.read()
-#	formatted_media = format_media("8383-892-8938493-998", "png", "owner_image", binary_img)
+#	formatted_media = format_media("<directive>", "8383-892-8938493-998", "png", "owner_image", binary_img)
+#	there is three directive: 1) "rm" mean requested media, 2) "fm" mean formatted media, 3) "ee" means error
+#	
 def format_media(pc_uuid, media_type, id, binary):
-	meta = "{}::{}::{}::{}".format(pc_uuid, media_type, id, "--==--")
+	meta = "{}::{}::{}::{}::{}".format("fm", pc_uuid, media_type, id, "--==--")
 	return meta.encode() + binary
 
 def get_render(req_data):
@@ -115,7 +117,7 @@ if __name__ == "__main__":
 	logger = logging.getLogger(__name__)
 	logger.info("This goes to both the file and console")
 	# Target URL
-	uri = os.environ["SIGNALSERVER"]
+	uri = "{}/{}".format(os.environ["SIGNALSERVER"], "/ws/signal")
 	
 	# my_context = ssl.create_default_context()
 	# my_context.load_verify_locations('my_extra_CAs.cer')

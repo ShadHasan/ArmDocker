@@ -1,0 +1,74 @@
+# Generate 6 HTML pages
+## Instruction for generating HTML
+- Do not use style tag keep css inline
+- Keep css and html simple and attractive. Feel free to use free and right to use commercially icon or generate.
+- Do not use event listener and callback like OnClick etc.
+- Put all the javascript in separate script.js
+- Within script.js, keep all callback functions together with parameterized as much as possible.
+- Within same script.js, after all callback functions all the event listeners are need to be added 
+	with calling it relevant callback function or callback functions.
+- It should be possible that any callback function might be calling other functions as well as
+callback function might have other promise that need to be asynchronous listening. Such promise
+need to be categorised as event and must be kept with event listener.
+- Source this script.js in all the html pages at the end, within body tag.
+
+## Detail of 5 pages are below
+### Product listing:
+	- This page will input field as search for products. With suggestion after 3 letter entering.
+	- List of products preview with below showing minimum details as a grid with botton 
+	navigation previous, next button as well as page index in between these button. 
+	- These page index should be editable and trigger product list fetch
+	of that index.
+	- Each product preview is clickable and trigger relevant product details page.
+	- Side bar for filter categories.
+	
+	
+### Product page:
+	- This page is product details.
+	- On left, with product preview slider left and right button that handles
+	sliding different image. Between left and right button there are all preview image of that image
+	as small image.
+	- On right side, Product name in heading. Below description. Give actual price and below price at
+	available generally discounted. then add quatity followed by add to basket button. Details specification. Input for Area PIN code 
+	for delivery availability.
+	- Below these two section: Product Ads area.
+	- Add to basket button trigger adding of product to the basket of the given quantity.
+	
+### Checkout page:
+	- This page shows all the product added to the basket. 
+	- There is table of products added to the basket. Each row represent a product and quatity that can be update. Then price.
+	- After this total price followed by checkout button.
+	- Checkout button trigger order placement.
+	
+### Order placed page:
+	- This is order placement page which basically display successfully order place with Order ID.
+	
+### Order details page:
+	- On top, it shows order ID followed by status as heading.
+	- List of products with quantity and price.
+	- Below total price, promotion etc.
+	- Delivery details etc.
+	- Shipping tracking details etc.
+	- Helpline/Support contact: <phone number> and email: <email>
+
+### Order list page:
+	- It has line line entry of previos order with status showing.
+	- There are the status: "Processing", "Accepted", "Pending", "shipped", "Completed", "Cancelled"
+	- Each entry shows order ID, status.
+	- This line entry is clickable which takes to order details page of that order id.
+
+### History page:
+	- It has line entry like a log of user activity consists of below:
+		1. It should list of all product visited.
+		2. Added and remove product from basket.
+		3. Order placement time etc.
+	- At bottom, clear history button.
+	
+### Common UI for all image
+	- There is header with right side logo of dimension 1:3 width to height ratio. On Left side of header
+	 basket icon clickable followed by user logged icon which is drop down menu with option for logout.
+	- On clicking basket icon it should take to checkout page.
+	- There is header showing blah blah copyright message.
+	
+	
+	
