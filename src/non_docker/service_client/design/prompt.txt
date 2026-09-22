@@ -1,4 +1,4 @@
-# Generate 6 HTML pages
+# Generate 7 HTML pages. Below are the details.
 ## Instruction for generating HTML
 - Do not use style tag keep css inline
 - Keep css and html simple and attractive. Feel free to use free and right to use commercially icon or generate.
@@ -66,7 +66,8 @@ need to be categorised as event and must be kept with event listener.
 	
 ### Common UI for all image
 	- There is header with right side logo of dimension 1:3 width to height ratio. On Left side of header
-	 basket icon clickable followed by user logged icon which is drop down menu with option for logout.
+	 basket icon clickable followed by user logged icon which is drop down menu with option for orders which 
+	 on click takes to order list page and logout which on click request session deletion.
 	- On clicking basket icon it should take to checkout page.
 	- There is header showing blah blah copyright message.
 	

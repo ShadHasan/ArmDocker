@@ -1,0 +1,676 @@
+<!--
+Here is a complete, single-file HTML interface with embedded CSS and JavaScript that connects directly to a **CouchDB** database to perform full CRUD operations (Create, Read, Update, Delete) for your inventory.
+
+It handles image snapshotting via webcam, short video recording, image thumbnail previews, dynamic tag handling, responsive loading states, and full media persistence in CouchDB using base64 attachments.
+
+### Implementation Guidelines & Requirements
+
+1. **CouchDB Setup:** Ensure CouchDB is running (typically on `[http://127.0.0.1:5984](http://127.0.0.1:5984)`).
+2. **CORS:** Ensure CORS is enabled on CouchDB if accessing via browser (or use a local reverse proxy like Nginx/Node.js).
+3. **Authentication:** Enter your CouchDB Base URL, Database Name (`inventory`), Username, and Password in the configuration section at the top of the script tag.
+
+---
+
+### `index.html`
+html 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f8f9fa; color: #333; }
+        .container { max-width: 1100px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1, h2, h3 { margin-top: 0; color: #2c3e50; }
+        .btn { padding: 10px 18px; border: none; border-radius: 5px; cursor: pointer; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-primary:hover { background: #2980b9; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-danger:hover { background: #c0392b; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-warning:hover { background: #d68910; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
+        th { background-color: #f1f5f9; font-weight: 600; }
+        tr:hover { background-color: #f8fafc; }
+        .clickable-row { cursor: pointer; }
+        
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: flex-start; overflow-y: auto; padding: 30px 0; z-index: 1000; }
+        .modal-content { background: white; width: 90%; max-width: 800px; padding: 25px; border-radius: 8px; position: relative; }
+        .close-btn { position: absolute; right: 20px; top: 20px; font-size: 24px; cursor: pointer; border: none; background: none; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: span 2; }
+        label { font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #475569; }
+        input, select, textarea { padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 14px; }
+        textarea { resize: vertical; min-height: 80px; }
+        
+        .media-section { border: 1px solid #e2e8f0; padding: 15px; border-radius: 6px; background: #fafafa; margin-top: 10px; }
+        .camera-preview { width: 100%; max-width: 320px; height: 240px; background: #000; border-radius: 4px; }
+        .thumbnail-container { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .thumbnail-item { position: relative; display: inline-block; }
+        .thumbnail-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc; }
+        .thumbnail-item .btn-delete-img { position: absolute; top: -5px; right: -5px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer; font-size: 10px; }
+        
+        #loading-indicator { text-align: center; padding: 40px; font-size: 18px; color: #64748b; }
+        .status-message { padding: 10px; margin-bottom: 15px; border-radius: 4px; display: none; }
+        .status-success { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Inventory Dashboard</h1>
+        <button class="btn btn-primary" id="btn-open-add">+ Add Product</button>
+    </div>
+
+    <div id="status-box" class="status-message"></div>
+
+    <!-- Inventory Table View -->
+    <div id="loading-indicator">Loading inventory from CouchDB...</div>
+    <div id="table-container" style="display: none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-table-body"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Product Modal (Add / Edit Form) -->
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="btn-close-modal">&times;</button>
+        <h2 id="modal-title">Add New Product</h2>
+        
+        <form id="product-form">
+            <input type="hidden" id="form-doc-id">
+            <input type="hidden" id="form-doc-rev">
+
+            <div class="form-grid">
+                <div class="form-group full-width" id="id-display-group" style="display: none;">
+                    <label>Product ID</label>
+                    <input type="text" id="prod-id-display" disabled style="background: #f1f5f9;">
+                </div>
+
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input type="text" id="prod-name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="prod-category" required>
+                        <option value="">Select Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Apparel">Apparel</option>
+                        <option value="Home & Kitchen">Home & Kitchen</option>
+                        <option value="Books">Books</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description</label>
+                    <textarea id="prod-description"></textarea>
+                </div>
+
+                <!-- Snapshot Camera -->
+                <div class="form-group full-width media-section">
+                    <label>Camera (Snapshot)</label>
+                    <div style="display: flex; gap: 15px; align-items: center;">
+                        <video id="snapshot-video" class="camera-preview" autoplay playsinline muted></video>
+                        <div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="btn-start-snap-cam">Start Camera</button>
+                            <button type="button" class="btn btn-primary btn-sm" id="btn-take-snap" style="margin-top: 5px;">Take Snapshot</button>
+                        </div>
+                    </div>
+                    <canvas id="snapshot-canvas" style="display: none;"></canvas>
+                    <div class="thumbnail-container" id="image-thumbnails"></div>
+                </div>
+
+                <!-- Video Camera -->
+                <div class="form-group full-width media-section">
+                    <label>Camera (30 sec Video Recording)</label>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                        <video id="rec-video-preview" class="camera-preview" autoplay playsinline muted></video>
+                        <div>
+                            <button type="button" class="btn btn-secondary btn-sm" id="btn-start-rec-cam">Start Camera</button>
+                            <button type="button" class="btn btn-danger btn-sm" id="btn-start-rec" style="margin-top: 5px;">Record Video (Max 30s)</button>
+                            <div id="rec-timer" style="margin-top: 5px; font-weight: bold; color: #e74c3c;"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label>Video Preview:</label>
+                        <video id="video-playback" controls style="width: 100%; max-width: 320px; display: none; margin-top: 5px;"></video>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tags (comma separated)</label>
+                    <input type="text" id="prod-tags" placeholder="e.g. sale, new, featured">
+                </div>
+
+                <div class="form-group">
+                    <label>Cost Price ($)</label>
+                    <input type="number" step="0.01" id="prod-cost-price" value="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Selling Price ($)</label>
+                    <input type="number" step="0.01" id="prod-selling-price" value="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Discount ($)</label>
+                    <input type="number" step="0.01" id="prod-discount" value="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity *</label>
+                    <input type="number" id="prod-quantity" value="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label>HSN Code</label>
+                    <input type="text" id="prod-hsn">
+                </div>
+            </div>
+
+            <div style="margin-top: 25px; text-align: right;">
+                <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit-form">Upload</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Product Details View Modal -->
+<div id="details-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-btn" id="btn-close-details">&times;</button>
+        <h2 id="details-title">Product Details</h2>
+        <div id="details-content"></div>
+    </div>
+</div>
+
+<script>
+// ==========================================
+// CONFIGURATION & COUCHDB HELPERS
+// ==========================================
+const COUCHDB_CONFIG = {
+    baseUrl: 'http://10.10.12.9:5984',
+    dbName: 'inventory',
+    auth: {
+        username: 'admin', // Change as per configuration
+        password: 'PAJIHING'  // Change as per configuration
+    }
+};
+
+function getAuthHeader() {
+    return 'Basic ' + btoa(`${COUCHDB_CONFIG.auth.username}:${COUCHDB_CONFIG.auth.password}`);
+}
+
+async function couchFetch(url, options = {}) {
+    options.headers = {
+        ...options.headers,
+        'Authorization': getAuthHeader(),
+        'Accept': 'application/json'
+    };
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.reason || `HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+}
+
+// Ensure database exists
+async function initDb() {
+    try {
+        const url = `${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}`;
+        await couchFetch(url, { method: 'GET' });
+    } catch (e) {
+        try {
+            await couchFetch(`${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}`, { method: 'PUT' });
+        } catch (err) {
+            console.warn('Could not auto-create database. Ensure CouchDB is running and credentials are valid.', err);
+        }
+    }
+}
+
+// ==========================================
+// STATE MANAGEMENT
+// ==========================================
+let currentSnapStream = null;
+let currentRecStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+let snapImages = []; // Stores Base64 string snapshots
+let recordedVideoBase64 = null; // Stores Base64 recorded video
+let isEditMode = false;
+
+// ==========================================
+// MAIN INITIALIZATION & CRUD OPERATIONS
+// ==========================================
+document.addEventListener('DOMContentLoaded', async () => {
+    await initDb();
+    fetchInventory();
+
+    // Event Listeners
+    document.getElementById('btn-open-add').addEventListener('click', openAddModal);
+    document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+    document.getElementById('btn-cancel-modal').addEventListener('click', closeModal);
+    document.getElementById('btn-close-details').addEventListener('click', () => {
+        document.getElementById('details-modal').style.display = 'none';
+    });
+
+    document.getElementById('product-form').addEventListener('submit', handleFormSubmit);
+
+    // Media Controls
+    document.getElementById('btn-start-snap-cam').addEventListener('click', startSnapCamera);
+    document.getElementById('btn-take-snap').addEventListener('click', takeSnapshot);
+    document.getElementById('btn-start-rec-cam').addEventListener('click', startRecCamera);
+    document.getElementById('btn-start-rec').addEventListener('click', startVideoRecording);
+});
+
+function showStatus(message, type = 'success') {
+    const box = document.getElementById('status-box');
+    box.innerText = message;
+    box.className = `status-message status-${type}`;
+    box.style.display = 'block';
+    setTimeout(() => { box.style.display = 'none'; }, 4000);
+}
+
+// Fetch Inventory (READ)
+async function fetchInventory() {
+    const loading = document.getElementById('loading-indicator');
+    const tableContainer = document.getElementById('table-container');
+    const tbody = document.getElementById('inventory-table-body');
+
+    loading.style.display = 'block';
+    tableContainer.style.display = 'none';
+    tbody.innerHTML = '';
+
+    try {
+        const url = `${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}/_all_docs?include_docs=true`;
+        const data = await couchFetch(url);
+        
+        const docs = data.rows
+            .map(row => row.doc)
+            .filter(doc => !doc._id.startsWith('_design/'));
+
+        if (docs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No inventory records found.</td></tr>';
+        } else {
+            docs.forEach(doc => {
+                const tr = document.createElement('tr');
+                tr.className = 'clickable-row';
+                tr.innerHTML = `
+                    <td>${doc._id}</td>
+                    <td><strong>${doc.name || ''}</strong></td>
+                    <td>${doc.category || ''}</td>
+                    <td>${doc.quantity || 0}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm btn-edit" data-id="${doc._id}">Edit</button>
+                        <button class="btn btn-danger btn-sm btn-delete" data-id="${doc._id}" data-rev="${doc._rev}">Delete</button>
+                    </td>
+                `;
+
+                // Row click triggers product details
+                tr.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('btn-edit') || e.target.classList.contains('btn-delete')) return;
+                    showProductDetails(doc);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+            // Attach listeners to dynamic buttons
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openEditModal(btn.dataset.id);
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteProduct(btn.dataset.id, btn.dataset.rev);
+                });
+            });
+        }
+    } catch (err) {
+        showStatus(`Failed to load inventory: ${err.message}`, 'error');
+    } finally {
+        loading.style.display = 'none';
+        tableContainer.style.display = 'block';
+    }
+}
+
+// Generate Unique Product ID
+function generateUniqueId() {
+    return 'PRD-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000);
+}
+
+// Save / Update Product (CREATE & UPDATE)
+async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('prod-name').value;
+    const category = document.getElementById('prod-category').value;
+    const description = document.getElementById('prod-description').value;
+    const tags = document.getElementById('prod-tags').value.split(',').map(t => t.trim()).filter(Boolean);
+    const costPrice = parseFloat(document.getElementById('prod-cost-price').value) || 0;
+    const sellingPrice = parseFloat(document.getElementById('prod-selling-price').value) || 0;
+    const discount = parseFloat(document.getElementById('prod-discount').value) || 0;
+    const quantity = parseInt(document.getElementById('prod-quantity').value, 10) || 0;
+    const hsn = document.getElementById('prod-hsn').value;
+
+    const docId = document.getElementById('form-doc-id').value || generateUniqueId();
+    const docRev = document.getElementById('form-doc-rev').value;
+
+    const doc = {
+        _id: docId,
+        name,
+        category,
+        description,
+        tags,
+        costPrice,
+        sellingPrice,
+        discount,
+        quantity,
+        hsn,
+        images: snapImages,
+        video: recordedVideoBase64,
+        updatedAt: new Date().toISOString()
+    };
+
+    if (isEditMode && docRev) {
+        doc._rev = docRev;
+    } else {
+        doc.createdAt = new Date().toISOString();
+    }
+
+    try {
+        const url = `${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}/${docId}`;
+        await couchFetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(doc)
+        });
+
+        showStatus(isEditMode ? 'Product updated successfully!' : 'Product uploaded successfully!');
+        closeModal();
+        fetchInventory();
+    } catch (err) {
+        showStatus(`Error saving product: ${err.message}`, 'error');
+    }
+}
+
+// Delete Product (DELETE)
+async function deleteProduct(id, rev) {
+    if (!confirm(`Are you sure you want to delete product ${id}?`)) return;
+
+    try {
+        const url = `${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}/${id}?rev=${rev}`;
+        await couchFetch(url, { method: 'DELETE' });
+        showStatus('Product deleted successfully');
+        fetchInventory();
+    } catch (err) {
+        showStatus(`Delete failed: ${err.message}`, 'error');
+    }
+}
+
+// Product Details View
+function showProductDetails(doc) {
+    const content = document.getElementById('details-content');
+    
+    let imagesHtml = '';
+    if (doc.images && doc.images.length > 0) {
+        imagesHtml = `<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">` +
+            doc.images.map(img => `<img src="${img}" style="width:120px; height:120px; object-fit:cover; border-radius:4px; border:1px solid #ccc;">`).join('') +
+            `</div>`;
+    }
+
+    let videoHtml = '';
+    if (doc.video) {
+        videoHtml = `<div style="margin-top:15px;">
+            <strong>Recorded Video:</strong><br>
+            <video src="${doc.video}" controls style="width:100%; max-width:400px; margin-top:5px; border-radius:4px;"></video>
+        </div>`;
+    }
+
+    content.innerHTML = `
+        <p><strong>Product ID:</strong> ${doc._id}</p>
+        <p><strong>Name:</strong> ${doc.name}</p>
+        <p><strong>Category:</strong> ${doc.category}</p>
+        <p><strong>Description:</strong> ${doc.description || 'N/A'}</p>
+        <p><strong>Tags:</strong> ${doc.tags ? doc.tags.join(', ') : 'None'}</p>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin: 15px 0;">
+            <div><strong>Cost Price:</strong> $${doc.costPrice || 0}</div>
+            <div><strong>Selling Price:</strong> $${doc.sellingPrice || 0}</div>
+            <div><strong>Discount:</strong> $${doc.discount || 0}</div>
+            <div><strong>Quantity:</strong> ${doc.quantity || 0}</div>
+            <div><strong>HSN Code:</strong> ${doc.hsn || 'N/A'}</div>
+        </div>
+        ${imagesHtml ? `<div style="margin-top:15px;"><strong>Product Snapshots:</strong>${imagesHtml}</div>` : ''}
+        ${videoHtml}
+    `;
+
+    document.getElementById('details-modal').style.display = 'flex';
+}
+
+// ==========================================
+// MODAL & FORM CONTROLS
+// ==========================================
+function openAddModal() {
+    isEditMode = false;
+    resetForm();
+    document.getElementById('modal-title').innerText = 'Add Inventory Product';
+    document.getElementById('id-display-group').style.display = 'none';
+    document.getElementById('btn-submit-form').innerText = 'Upload';
+    document.getElementById('product-modal').style.display = 'flex';
+}
+
+async function openEditModal(id) {
+    isEditMode = true;
+    resetForm();
+    document.getElementById('modal-title').innerText = 'Edit Inventory Product';
+    document.getElementById('id-display-group').style.display = 'block';
+    document.getElementById('btn-submit-form').innerText = 'Update';
+
+    try {
+        const url = `${COUCHDB_CONFIG.baseUrl}/${COUCHDB_CONFIG.dbName}/${id}`;
+        const doc = await couchFetch(url);
+
+        document.getElementById('form-doc-id').value = doc._id;
+        document.getElementById('form-doc-rev').value = doc._rev;
+        document.getElementById('prod-id-display').value = doc._id;
+        document.getElementById('prod-name').value = doc.name || '';
+        document.getElementById('prod-category').value = doc.category || '';
+        document.getElementById('prod-description').value = doc.description || '';
+        document.getElementById('prod-tags').value = doc.tags ? doc.tags.join(', ') : '';
+        document.getElementById('prod-cost-price').value = doc.costPrice || 0;
+        document.getElementById('prod-selling-price').value = doc.sellingPrice || 0;
+        document.getElementById('prod-discount').value = doc.discount || 0;
+        document.getElementById('prod-quantity').value = doc.quantity || 0;
+        document.getElementById('prod-hsn').value = doc.hsn || '';
+
+        // Load images
+        if (doc.images) {
+            snapImages = doc.images;
+            renderThumbnails();
+        }
+
+        // Load video
+        if (doc.video) {
+            recordedVideoBase64 = doc.video;
+            const videoPlayback = document.getElementById('video-playback');
+            videoPlayback.src = recordedVideoBase64;
+            videoPlayback.style.display = 'block';
+        }
+
+        document.getElementById('product-modal').style.display = 'flex';
+    } catch (err) {
+        showStatus(`Error opening edit form: ${err.message}`, 'error');
+    }
+}
+
+function closeModal() {
+    stopCameraStreams();
+    document.getElementById('product-modal').style.display = 'none';
+    resetForm();
+}
+
+function resetForm() {
+    document.getElementById('product-form').reset();
+    document.getElementById('form-doc-id').value = '';
+    document.getElementById('form-doc-rev').value = '';
+    snapImages = [];
+    recordedVideoBase64 = null;
+    renderThumbnails();
+    
+    const playback = document.getElementById('video-playback');
+    playback.src = '';
+    playback.style.display = 'none';
+    document.getElementById('rec-timer').innerText = '';
+}
+
+// ==========================================
+// MEDIA CAPTURE LOGIC (WEBCAM & VIDEO)
+// ==========================================
+async function startSnapCamera() {
+    try {
+        if (currentSnapStream) stopStream(currentSnapStream);
+        currentSnapStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        document.getElementById('snapshot-video').srcObject = currentSnapStream;
+    } catch (err) {
+        alert('Could not access camera for snapshots: ' + err.message);
+    }
+}
+
+function takeSnapshot() {
+    const video = document.getElementById('snapshot-video');
+    if (!video.srcObject) {
+        alert('Please start the camera first.');
+        return;
+    }
+
+    const canvas = document.getElementById('snapshot-canvas');
+    canvas.width = video.videoWidth || 320;
+    canvas.height = video.videoHeight || 240;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    snapImages.push(dataUrl);
+    renderThumbnails();
+}
+
+function renderThumbnails() {
+    const container = document.getElementById('image-thumbnails');
+    container.innerHTML = '';
+    snapImages.forEach((imgBase64, index) => {
+        const item = document.createElement('div');
+        item.className = 'thumbnail-item';
+        item.innerHTML = `
+            <img src="${imgBase64}">
+            <button type="button" class="btn-delete-img" onclick="removeSnapshot(${index})">&times;</button>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function removeSnapshot(index) {
+    snapImages.splice(index, 1);
+    renderThumbnails();
+}
+
+async function startRecCamera() {
+    try {
+        if (currentRecStream) stopStream(currentRecStream);
+        currentRecStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById('rec-video-preview').srcObject = currentRecStream;
+    } catch (err) {
+        alert('Could not access camera/microphone for video recording: ' + err.message);
+    }
+}
+
+function startVideoRecording() {
+    const preview = document.getElementById('rec-video-preview');
+    if (!preview.srcObject) {
+        alert('Please start the camera first.');
+        return;
+    }
+
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(preview.srcObject);
+
+    mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) recordedChunks.push(e.data);
+    };
+
+    mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'video/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+            recordedVideoBase64 = reader.result;
+            const videoPlayback = document.getElementById('video-playback');
+            videoPlayback.src = recordedVideoBase64;
+            videoPlayback.style.display = 'block';
+        };
+    };
+
+    mediaRecorder.start();
+    let secondsLeft = 30;
+    const timerDisplay = document.getElementById('rec-timer');
+    timerDisplay.innerText = `Recording... ${secondsLeft}s left`;
+
+    const interval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft > 0) {
+            timerDisplay.innerText = `Recording... ${secondsLeft}s left`;
+        } else {
+            clearInterval(interval);
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                timerDisplay.innerText = 'Recording completed (30s limit reached).';
+            }
+        }
+    }, 1000);
+}
+
+function stopCameraStreams() {
+    if (currentSnapStream) stopStream(currentSnapStream);
+    if (currentRecStream) stopStream(currentRecStream);
+    currentSnapStream = null;
+    currentRecStream = null;
+}
+
+function stopStream(stream) {
+    stream.getTracks().forEach(track => track.stop());
+}
+</script>
+
+</body>
+</html>

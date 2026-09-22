@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Listing</title>
+</head>
+<body style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f9;">
+
+    <!-- Header -->
+    <header style="background-color: #333; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 15px; position: relative;">
+            <button id="header-basket-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;">🛒 Basket</button>
+            <div style="position: relative;">
+                <button id="header-user-menu-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;">👤 User</button>
+                <div id="header-user-dropdown" style="display: none; position: absolute; top: 30px; left: 0; background: white; color: black; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.2); width: 120px; z-index: 100;">
+                    <div id="dropdown-opt-orders" style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;">Orders</div>
+                    <div id="dropdown-opt-logout" style="padding: 10px; cursor: pointer;">Logout</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <!-- Logo with 1:3 Width:Height aspect ratio (e.g., 30px width, 90px height) -->
+            <img src="https://via.placeholder.com/30x90?text=Logo" alt="Logo" style="width: 30px; height: 90px; object-fit: cover;">
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div style="display: flex; max-width: 1200px; margin: 20px auto; gap: 20px; padding: 0 10px;">
+        <!-- Sidebar Filter -->
+        <aside style="width: 250px; background: white; padding: 15px; border-radius: 5px; height: fit-content;">
+            <h3 style="margin-top: 0;">Categories</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 8px 0; border-bottom: 1px solid #eee;"><label><input type="checkbox"> Electronics</label></li>
+                <li style="padding: 8px 0; border-bottom: 1px solid #eee;"><label><input type="checkbox"> Fashion</label></li>
+                <li style="padding: 8px 0; border-bottom: 1px solid #eee;"><label><input type="checkbox"> Home & Kitchen</label></li>
+            </ul>
+        </aside>
+
+        <!-- Main Product Grid Section -->
+        <main style="flex: 1;">
+            <!-- Search Field with Suggestions -->
+            <div style="position: relative; margin-bottom: 20px;">
+                <input type="text" id="product-search-input" placeholder="Search products (min 3 characters)..." style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                <div id="search-suggestions" style="display: none; position: absolute; top: 40px; left: 0; width: 100%; background: white; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 10;"></div>
+            </div>
+
+            <!-- Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                <div class="product-card" data-name="Wireless Headphones" style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 5px; cursor: pointer;">
+                    <img src="https://via.placeholder.com/150" alt="Product" style="width: 100%; border-radius: 5px;">
+                    <h4 style="margin: 10px 0 5px 0;">Wireless Headphones</h4>
+                    <p style="color: #666; margin: 0;">$99.99</p>
+                </div>
+                <div class="product-card" data-name="Smart Watch" style="background: white; border: 1px solid #ddd; padding: 15px; border-radius: 5px; cursor: pointer;">
+                    <img src="https://via.placeholder.com/150" alt="Product" style="width: 100%; border-radius: 5px;">
+                    <h4 style="margin: 10px 0 5px 0;">Smart Watch</h4>
+                    <p style="color: #666; margin: 0;">$149.99</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px;">
+                <button id="btn-prev-page" style="padding: 8px 15px; cursor: pointer;">Previous</button>
+                <span>Page <input type="number" id="page-index-input" value="1" style="width: 40px; text-align: center;"></span>
+                <button id="btn-next-page" style="padding: 8px 15px; cursor: pointer;">Next</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #333; color: white; text-align: center; padding: 15px; margin-top: 40px;">
+        blah blah copyright message
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

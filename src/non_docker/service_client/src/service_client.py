@@ -6,6 +6,7 @@ import asyncio
 import websocket
 import threading
 import logging
+from websocket import create_connection
 
 # Service configuration related
 logging.basicConfig(
@@ -41,9 +42,12 @@ def get_ui_details(req_data):
 	return {}
 	
 def send_binary_to_socket(req_data):
+	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))
+	ws.send_binary()
+	ws.close()
 	result = {}
 	result["status"] = "ok"
-	return result
+	return {"status": "ok"}
 
 def process_action(req_data):
 	action_functions = {
