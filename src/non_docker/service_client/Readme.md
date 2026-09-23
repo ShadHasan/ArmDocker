@@ -174,3 +174,66 @@ Click the Relaunch button at the bottom right to restart Chrome.
 
 Refresh your page. Chrome will now prompt you to grant camera permissions.
 ```
+
+## Prepare SSL environment for admin UI
+
+- Create directory for admin-UI
+```
+	mkdir -p ~/secure_env
+```
+- Create SSL certificate
+```
+with Prompt
+---
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out cert.pem -keyout key.pem
+
+witout prompt
+---
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+  -out cert.pem -keyout key.pem \
+  -subj "/C=IN/ST=cg/L=abkp/O=tinyorb/OU=Development/CN=10.10.12.9"
+```
+Note: if required giver cert and key permission ` sudo chmod 644 <filename>`
+
+- Create server.py
+```
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import ssl
+
+def run_server(port=8999):
+	server_address = ('0.0.0.0', port)
+	httpd = HTTPServer(server_address, SimpleHTTPRequestHandler)
+
+	# Initialize the modern TLS server context
+	context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+
+	# Load your certificate and private key
+	context.load_cert_chain(certfile='cert.pem', keyfile='key.pem')
+
+	# Wrap the HTTP server socket with SSL
+	httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
+
+	print(f"Serving HTTPS on https://localhost:{port} ...")
+	try:
+		httpd.serve_forever()
+	except KeyboardInterrupt:
+		print("\nServer stopped.")
+
+if __name__ == "__main__":
+	run_server()
+```
+
+Now run http server
+```
+python3 server.py > /var/log/server.log 2>&1 &
+```
+
+without SSL it can be run as below(But browser won't allow camera, mic, sound etc.)
+```
+python3 -m http.server 8999 --bind 0.0.0.0 > /var/log/server.log 2>&1 &
+```
+
+Link will be
+```
+https://10.10.12.9:8999/admin-ui/
+```

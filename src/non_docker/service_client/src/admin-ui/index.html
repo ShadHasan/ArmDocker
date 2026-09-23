@@ -558,11 +558,43 @@ function resetForm() {
 // ==========================================
 // MEDIA CAPTURE LOGIC (WEBCAM & VIDEO)
 // ==========================================
+
+function getDeviceType() {
+  // 1. Check modern Chromium Client Hints if available
+  if (navigator.userAgentData) {
+    return navigator.userAgentData.mobile ? 'mobile' : 'desktop';
+  }
+  
+  // 2. Fallback: Check touch points combined with screen size (safeguard for iOS/Safari)
+  const isTouchDevice = navigator.maxTouchPoints > 0;
+  const isSmallScreen = window.matchMedia("(max-width: 768px)").matches;
+  
+  if (isTouchDevice && isSmallScreen) {
+    return 'mobile';
+  }
+  
+  // 3. Fallback: Traditional keyword sniffing for "Mobi"
+  if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+    return 'mobile';
+  }
+
+  return 'desktop';
+}
+
 async function startSnapCamera() {
     try {
         if (currentSnapStream) stopStream(currentSnapStream);
-        currentSnapStream = await navigator.mediaDevices.getUserMedia({ video: true });
-        document.getElementById('snapshot-video').srcObject = currentSnapStream;
+        if (getDeviceType() == "desktop") {
+        	currentSnapStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        	document.getElementById('snapshot-video').srcObject = currentSnapStream;
+        }
+        else {
+        	currentSnapStream = await navigator.mediaDevices.getUserMedia({video: { 
+			    facingMode: { exact: "environment" } 
+			}});
+        	document.getElementById('snapshot-video').srcObject = currentSnapStream;
+        }
+        
     } catch (err) {
         alert('Could not access camera for snapshots: ' + err.message);
     }

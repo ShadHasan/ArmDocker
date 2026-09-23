@@ -4,14 +4,14 @@ set remotedir=/home/%username%/temp_proj_svc
 set SERVICE_CLIENT_PROGRAM_PATH=/home/ubuntu/service_client/service_client.py
 set SERVICE_CLIENT_SERVICE_PATH=/etc/systemd/system/service_client.service
 set UI_PATH=/home/ubuntu/service_client/ui
-set ADMINUI_PATH=/home/ubuntu/service_client/admin-ui
+set ADMINUI_PATH=/home/ubuntu/secure_env/admin-ui
 set LOGPATH=/var/log/service_client.log
 
 echo Clean up starting...
 
 .\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "echo 'Hello connect check';"
 
-.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo rm -rf %remotedir% || true; sudo mkdir -p %remotedir%;sudo chown -R %username%:%username% %remotedir%; sudo systemctl disable service_client.service || true; sudo systemctl stop service_client.service || true; sudo rm -rf %SERVICE_CLIENT_SERVICE_PATH% || true; sudo rm -rf %SERVICE_CLIENT_PROGRAM_PATH% || true; pkill -f 'python3 -m http.server 8999 --bind 0.0.0.0' || true;"
+.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo rm -rf %remotedir% || true; sudo mkdir -p %remotedir%;sudo chown -R %username%:%username% %remotedir%; sudo systemctl disable service_client.service || true; sudo systemctl stop service_client.service || true; sudo rm -rf %SERVICE_CLIENT_SERVICE_PATH% || true; sudo rm -rf %SERVICE_CLIENT_PROGRAM_PATH% || true; pkill -f 'python3 server.py' || true;"
 
 
 echo Checking remote dir exist...
@@ -27,7 +27,7 @@ echo Starting copying to host...
 
 echo Copying to respective position...
 
-.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo cp %remotedir%/service_client.py %SERVICE_CLIENT_PROGRAM_PATH%; sudo chown -R %username%:%username% %SERVICE_CLIENT_PROGRAM_PATH%; sudo cp %remotedir%/service_client.service %SERVICE_CLIENT_SERVICE_PATH%; sudo cp -r %remotedir%/ui %UI_PATH%; sudo cp -r %remotedir%/admin-ui %ADMINUI_PATH%"
+.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo cp %remotedir%/service_client.py %SERVICE_CLIENT_PROGRAM_PATH%; sudo chown -R %username%:%username% %SERVICE_CLIENT_PROGRAM_PATH%; sudo cp %remotedir%/service_client.service %SERVICE_CLIENT_SERVICE_PATH%; sudo rm -rf %UI_PATH% || true; sudo cp -r %remotedir%/ui %UI_PATH%; sudo rm -rf %ADMINUI_PATH% || true; sudo cp -r %remotedir%/admin-ui %ADMINUI_PATH%"
 
 echo Deploying...
 .\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo touch %LOGPATH% || true;sudo chown -R %username%:%username% %LOGPATH%;"
@@ -36,7 +36,7 @@ echo Deploying...
 
 
 echo Deploying admin server...
-.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo touch /var/log/server.log || true ; sudo chown -R %username%:%username% /var/log/server.log; cd %ADMINUI_PATH% ; python3 -m http.server 8999 --bind 0.0.0.0 > /var/log/server.log 2>&1 & "
+.\binary\putty\PLINK.EXE %username%@%host% -pw "%password%" -batch "sudo touch /var/log/server.log || true ; sudo chown -R %username%:%username% /var/log/server.log; cd %ADMINUI_PATH% ; cd .. ; python3 server.py > /var/log/server.log 2>&1 & "
 
 echo 
 echo Execution completed
