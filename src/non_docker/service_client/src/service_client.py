@@ -45,11 +45,10 @@ def get_schema(req_data):
 	return {}
 	
 def get_ui_details(req_data):
-	return {
-		"pages": [],
-		"main_page_name": "",
-		"common_media_list": []
-	}
+	with open("./ui/config.json", 'r') as file:
+		# Load the JSON data into a Python object
+		data = json.load(file)
+		return data["ui_details"]
 	
 def send_binary_to_socket(req_data):
 	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))

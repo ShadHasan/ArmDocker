@@ -1,0 +1,39 @@
+{
+	"ui_details": {
+		"pages": ["checkout", "history", "product-listing", "order-details", "order-list", "order-success", "product"],
+		"main_page_name": "product-listing",
+		"common_media_list": []
+	},
+	"pages": {
+		"checkout": {
+			"path": "ui/checkout.html"
+		},
+		"history": {
+			"path": "ui/history.html"
+		},
+		"product-listing": {
+			"path": "ui/index.html"
+		},
+		"order-details": {
+			"path": "ui/order-details.html"
+		},
+		"order-list": {
+			"path": "ui/order-list.html"
+		},
+		"order-success": {
+			"path": "ui/order-success.html"
+		},
+		"product": {
+			"path": "ui/product.html"
+		}
+	},
+	"COUCHDB_CONFIG": {
+	    "baseUrl": "http://10.10.12.9:5984",
+	    "dbName": "inventory",
+	    "auth": {
+	        "username": "admin",
+	        "password": "PAJIHING"
+	    },
+	    "authStr": "Basic YWRtaW46UEFKSUhJTkc="
+	}
+}
