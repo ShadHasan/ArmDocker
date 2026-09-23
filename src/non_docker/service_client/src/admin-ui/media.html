@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CouchDB Media BLOB Dashboard</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 900px; margin: 30px auto; padding: 0 20px; background: #f9f9f9; color: #333; }
+        h1, h2 { color: #222; }
+        .config-box { background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 25px; }
+        .upload-section { background: #eef5fc; padding: 20px; border-radius: 8px; border: 1px solid #b6d4f4; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        button { cursor: pointer; padding: 8px 16px; border-radius: 4px; border: none; font-weight: bold; background: #0066cc; color: white; }
+        button:hover { background: #0052a3; }
+        button.btn-danger { background: #cc3333; }
+        button.btn-danger:hover { background: #992222; }
+        select, input[type="file"] { padding: 8px; border-radius: 4px; border: 1px solid #ccc; background: white; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; margin-top: 20px; }
+        .media-card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+        .media-preview { width: 100%; height: 150px; background: #eee; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #666; margin-bottom: 10px; }
+        .media-preview img, .media-preview video { width: 100%; height: 100%; object-fit: cover; }
+        .meta-info { font-size: 11px; color: #555; word-break: break-all; margin-bottom: 10px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <h1>CouchDB Media Manager</h1>
+    
+    <div class="config-box">
+        <strong>Active CouchDB Targets:</strong><br>
+        🖼️ Images: <code id="img-path"></code><br>
+        🎬 Videos: <code id="vid-path"></code>
+    </div>
+
+    <!-- Upload Panel -->
+    <div class="upload-section">
+        <div>
+            <label>Type: </label>
+            <select id="media-type">
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+            </select>
+        </div>
+        <input type="file" id="file-input">
+        <button onclick="uploadMedia()">Upload Raw BLOB</button>
+        <button onclick="loadAllMedia()" style="background: #222;">🔄 Refresh Gallery</button>
+    </div>
+
+    <h2>Stored Media Gallery</h2>
+    <div class="gallery" id="gallery-container">
+        <!-- Rendered items inject here dynamically -->
+    </div>
+
+<script>
+    // Configuration - ADJUST YOUR COUCHDB ADMIN CREDENTIALS AND HOST HERE
+    const COUCHDB_URL = "http://10.10.12.9:5984";
+    const COUCHDB_CONFIG = {
+	    baseUrl: 'http://10.10.12.9:5984',
+	    dbName: 'inventory',
+	    auth: {
+	        username: 'admin', // Change as per configuration
+	        password: 'PAJIHING'  // Change as per configuration
+	    }
+	};
+    
+    // Mapping sub-db paths matching your naming strategy via URL encoding (%2F)
+    const DB_PATHS = {
+        image: `${COUCHDB_URL}/media_image`,
+        video: `${COUCHDB_URL}/media_video`
+    };
+    
+    function getAuthHeader() {
+	    return 'Basic ' + btoa(`${COUCHDB_CONFIG.auth.username}:${COUCHDB_CONFIG.auth.password}`);
+	}
+
+    // UI Feedback Initialization
+    document.getElementById('img-path').innerText = `${COUCHDB_URL}/media_image/<doc_id>`;
+    document.getElementById('vid-path').innerText = `${COUCHDB_URL}/media_video/<doc_id>`;
+
+    // Quick init engine to ensure databases exist on CouchDB startup
+    async function initDBs() {
+        for (let type in DB_PATHS) {
+            await fetch(DB_PATHS[type], { method: 'PUT', headers: {'Authorization': getAuthHeader()} });
+        }
+        loadAllMedia();
+    }
+
+    // Helper: Generate Random Crypto Document IDs 
+    function generateRandomDocId() {
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    // 1. CREATE / UPLOAD: Streaming native binary file straight to document ID path
+    async function uploadMedia() {
+        const fileInput = document.getElementById('file-input');
+        const typeSelect = document.getElementById('media-type').value;
+        const file = fileInput.files[0];
+
+        if (!file) return alert("Please pick a file first!");
+
+        const docId = generateRandomDocId();
+        const filename = encodeURIComponent(file.name);
+        
+        // CouchDB Attachment URL destination structure
+        const uploadUrl = `${DB_PATHS[typeSelect]}/${docId}/${filename}`;
+
+        try {
+            const response = await fetch(uploadUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': file.type, 'Authorization': getAuthHeader() },
+                body: file // Streams the clean file directly as a raw BLOB payload without string inflation!
+            });
+
+            if (response.ok) {
+                alert(`Uploaded successfully to /media/${typeSelect}/${docId}`);
+                fileInput.value = ""; // clear input
+                loadAllMedia();
+            } else {
+                const err = await response.json();
+                alert(`Upload failed: ${err.reason}`);
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Network connection error communicating with CouchDB.");
+        }
+    }
+
+    // 2. FETCH & LIST: Query the database metadata registers to construct direct binary loops
+    async function loadAllMedia() {
+        const container = document.getElementById('gallery-container');
+        container.innerHTML = "Loading gallery indexes...";
+        let cardsHtml = "";
+
+        for (let type of ['image', 'video']) {
+            try {
+                // Fetch document indexes natively matching the _all_docs system array
+                const res = await fetch(`${DB_PATHS[type]}/_all_docs?include_docs=true`,
+                {
+                	method: 'GET',
+                	headers: { 'Authorization': getAuthHeader() }
+                });
+                if (!res.ok) continue;
+                
+                const data = await res.json();
+                
+                for (let row of data.rows) {
+                    const doc = row.doc;
+                    if (doc._attachments) {
+                        for (let filename in doc._attachments) {
+                            // Constructing direct, clean streaming URL straight to the raw binary location
+                            const rawBinaryUrl = `${DB_PATHS[type]}/${doc._id}/${filename}`;
+                            // 1. Fetch the image securely using JavaScript headers
+				            const imageResponse = await fetch(rawBinaryUrl, {
+				                headers: {
+				                    // This ensures authentication passes cleanly!
+				                    'Authorization': getAuthHeader() 
+				                }
+				            });
+				            
+				            // 2. Convert the raw binary data stream into a secure local browser BLOB
+				            const blob = await imageResponse.blob();
+				            const localPreviewUrl = URL.createObjectURL(blob);
+                            
+                            cardsHtml += `
+                                <div class="media-card">
+                                    <div class="media-preview">
+                                        ${type === 'image' 
+                                            ? `<img src="${localPreviewUrl}" alt="preview">` 
+                                            : `<video src="${localPreviewUrl}" controls></video>`
+                                        }
+                                    </div>
+                                    <div class="meta-info">
+                                        <strong>ID:</strong> ${doc._id}<br>
+                                        <strong>Path:</strong> /media/${type}/${doc._id}<br>
+                                        <strong>File:</strong> ${decodeURIComponent(filename)}<br>
+                                        <strong>Size:</strong> ${(doc._attachments[filename].length / 1024).toFixed(1)} KB
+                                    </div>
+                                    <button class="btn-danger" onclick="deleteMedia('${type}', '${doc._id}', '${doc._rev}')">Delete</button>
+                                </div>
+                            `;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error(`Error reading ${type} inventory:`, err);
+            }
+        }
+        
+        container.innerHTML = cardsHtml || "<p>No media files stored in CouchDB yet.</p>";
+    }
+
+    // 3. DELETE: Target specific document via current revision id tracking pointer
+    async function deleteMedia(type, docId, rev) {
+        if (!confirm("Are you sure you want to permanently delete this raw binary storage document?")) return;
+
+        try {
+            const deleteUrl = `${DB_PATHS[type]}/${docId}?rev=${rev}`;
+            const response = await fetch(deleteUrl, { method: 'DELETE', headers: { 'Authorization': getAuthHeader() } });
+
+            if (response.ok) {
+                loadAllMedia();
+            } else {
+                const err = await response.json();
+                alert(`Delete action aborted: ${err.reason}`);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    // Kick off environment check on document load
+    window.onload = initDBs;
+</script>
+</body>
+</html>

@@ -18,6 +18,12 @@ logging.basicConfig(
 	]
 )
 
+class CRUD:
+	
+	def fetch_binary_by_id(binary_id):
+		pass
+
+
 ## Action response related
 # Usage::
 #	f = open(os.path.join("<media_path>"), "rb")
@@ -39,11 +45,16 @@ def get_schema(req_data):
 	return {}
 	
 def get_ui_details(req_data):
-	return {}
+	return {
+		"pages": [],
+		"main_page_name": "",
+		"common_media_list": []
+	}
 	
 def send_binary_to_socket(req_data):
 	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))
-	ws.send_binary()
+	for binary_id in req_data["binary_list"]:
+		ws.send_binary(fetch_binary_by_id(binary_id))
 	ws.close()
 	result = {}
 	result["status"] = "ok"
