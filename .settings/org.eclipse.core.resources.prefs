@@ -1,10 +1,10 @@
 eclipse.preferences.version=1
 encoding//src/Qwen3.5_4b_RKLLM/context_conversation_tested.txt=UTF-8
 encoding//src/non_docker/service_client/src/admin-ui/media.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/checkout.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/history.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/index.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/order-details.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/order-list.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/order-success.html=UTF-8
-encoding//src/non_docker/service_client/src/ui/product.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/checkout.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/history.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/index.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/order-details.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/order-list.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/order-success.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/orig/product.html=UTF-8

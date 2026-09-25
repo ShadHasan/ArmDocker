@@ -1,0 +1,51 @@
+<div style="margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f9;">
+
+    <!-- Header -->
+    <header style="background-color: #333; color: white; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button id="header-basket-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;">🛒 Basket</button>
+            <div style="position: relative;">
+                <button id="header-user-menu-btn" style="background: none; border: none; color: white; cursor: pointer; font-size: 18px;">👤 User</button>
+                <div id="header-user-dropdown" style="display: none; position: absolute; top: 30px; left: 0; background: white; color: black; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0,0,0,0.2); width: 120px; z-index: 100;">
+                    <div id="dropdown-opt-orders" style="padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;">Orders</div>
+                    <div id="dropdown-opt-logout" style="padding: 10px; cursor: pointer;">Logout</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <img src="https://via.placeholder.com/30x90?text=Logo" alt="Logo" style="width: 30px; height: 90px; object-fit: cover;">
+        </div>
+    </header>
+
+    <div style="max-width: 800px; margin: 20px auto; background: white; padding: 20px; border-radius: 5px;">
+        <h2>Your Shopping Basket</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+            <thead>
+                <tr style="background: #f2f2f2; text-align: left;">
+                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Product</th>
+                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Quantity</th>
+                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Price</th>
+                    <th style="padding: 12px; border-bottom: 1px solid #ddd;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="cart-table-body">
+                <!-- Dynamically Populated by script.js -->
+            </tbody>
+        </table>
+
+        <div style="text-align: right; font-size: 18px; margin-bottom: 20px;">
+            <strong>Total Price: </strong><span id="cart-total-display">$0.00</span>
+        </div>
+
+        <div style="text-align: right;">
+            <button id="btn-place-order" style="background: #27ae60; color: white; border: none; padding: 12px 25px; font-size: 16px; border-radius: 4px; cursor: pointer;">Place Order</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #333; color: white; text-align: center; padding: 15px; margin-top: 40px;">
+        blah blah copyright message
+    </footer>
+
+    
+</div>

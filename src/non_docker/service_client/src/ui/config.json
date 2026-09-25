@@ -2,29 +2,37 @@
 	"ui_details": {
 		"pages": ["checkout", "history", "product-listing", "order-details", "order-list", "order-success", "product"],
 		"main_page_name": "product-listing",
-		"common_media_list": []
+		"common_media_list": [],
+		"body_css_inline": "style='margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f9;'"
 	},
 	"pages": {
 		"checkout": {
-			"path": "ui/checkout.html"
+			"render": "ui/checkout.render",
+			"script": "ui/script.js"
 		},
 		"history": {
-			"path": "ui/history.html"
+			"render": "ui/history.render",
+			"script": "ui/script.js"
 		},
 		"product-listing": {
-			"path": "ui/index.html"
+			"render": "ui/index.html",
+			"script": "ui/script.js"
 		},
 		"order-details": {
-			"path": "ui/order-details.html"
+			"render": "ui/order-details.render",
+			"script": "ui/script.js"
 		},
 		"order-list": {
-			"path": "ui/order-list.html"
+			"render": "ui/order-list.render",
+			"script": "ui/script.js"
 		},
 		"order-success": {
-			"path": "ui/order-success.html"
+			"render": "ui/order-success.render",
+			"script": "ui/script.js"
 		},
 		"product": {
-			"path": "ui/product.html"
+			"render": "ui/product.render",
+			"script": "ui/script.js"
 		}
 	},
 	"COUCHDB_CONFIG": {

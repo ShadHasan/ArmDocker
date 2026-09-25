@@ -6,6 +6,7 @@ import asyncio
 import websocket
 import threading
 import logging
+import requests
 from websocket import create_connection
 
 # Service configuration related
@@ -17,6 +18,7 @@ logging.basicConfig(
 		logging.StreamHandler()
 	]
 )
+
 
 class CRUD:
 	
@@ -35,29 +37,59 @@ def format_media(pc_uuid, media_type, id, binary):
 	meta = "{}::{}::{}::{}::{}".format("fm", pc_uuid, media_type, id, "--==--")
 	return meta.encode() + binary
 
+
 def get_render(req_data):
-	return {}
+	data = {}
+	with open("./ui/config.json", 'r') as file:
+		# Load the JSON data into a Python object
+		data = json.load(file)
+	render = ""
+	with open(data["pages"][req_data["render"]]["render"], "r") as f:
+		render = f.read()
 	
+	script = ""
+	with open(data["pages"][req_data["render"]]["script"], "r") as f:
+		script = f.read()
+		
+	return {"render": render, "script": script}
+
+
+# for time dbName is equivalent of data type
 def get_data(req_data):
-	return {}
+	product_list = req_data["product_list"]
+	offset = req_data["offset"] if req_data.get("offset") else 0
+	length = req_data["length"] if req_data.get("length") else 9
+	dbName = req_data["type"]
+	data = {}
+	with open("./ui/config.json", 'r') as file:
+		# Load the JSON data into a Python object
+		data = json.load(file)
+	
+	response = requests.get(
+		data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}".format(dbName, offset, length), 
+		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
+	return response
+	
 	
 def get_schema(req_data):
 	return {}
 	
+
 def get_ui_details(req_data):
+	data = {}
 	with open("./ui/config.json", 'r') as file:
 		# Load the JSON data into a Python object
 		data = json.load(file)
-		return data["ui_details"]
+	return data["ui_details"]
 	
+
 def send_binary_to_socket(req_data):
 	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))
 	for binary_id in req_data["binary_list"]:
 		ws.send_binary(fetch_binary_by_id(binary_id))
 	ws.close()
-	result = {}
-	result["status"] = "ok"
 	return {"status": "ok"}
+
 
 def process_action(req_data):
 	action_functions = {
@@ -87,12 +119,14 @@ def process_action(req_data):
 def ws_send_json(ws, msg):
 	ws.send(json.dumps(msg))
 
+
 async def exec_run(argument):
 	await asyncio.sleep(1)
 	logger.debug("Executing service client request, {}".format(argument))
 	argument["directive"] = "service_client_reply"
-	argument["result"] = ""
+	argument["result"] = process_action(argument)
 	return argument
+
 
 def process_and_send(ws, message):
 	directive = message.get("directive")
@@ -109,16 +143,20 @@ def process_and_send(ws, message):
 	elif signal_response == "socket_mapped":
 		logger.info("Service service registered")
 
+
 def on_message(ws, message):
 	logger.info(f"Received: {message}")
 	message = json.loads(message)
 	threading.Thread(target=process_and_send, args=(ws, message,), daemon=True).start()
 
+
 def on_error(ws, error):
 	logger.info(f"Error: {error}")
 
+
 def on_close(ws, close_status_code, close_msg):
 	logger.info("### Connection Closed ###")
+
 
 def on_open(ws):
 	logger.info("Opened connection successfully.")
