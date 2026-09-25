@@ -20,10 +20,36 @@ logging.basicConfig(
 )
 
 
-class CRUD:
+def fetch_binary_by_id(binary_id):
+	binary_result = []
+	response = requests.get(
+		"{}/{}/{}".format(data["COUCHDB_CONFIG"]["baseUrl"], "media_video", binary_id), 
+		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
+	if response.status_code == 404:
+		response = requests.get(
+			"{}/{}/{}".format(data["COUCHDB_CONFIG"]["baseUrl"], "media_image", binary_id), 
+			headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
+		if response.status_code == 404:
+			return binary_result
+		data = response.json()
+		if data.get("_attachments") is not None:
+			for attachment in data["_attachments"]:
+				for filename in attachment.keys():
+					response = requests.get(
+						"{}/{}/{}/{}".format(data["COUCHDB_CONFIG"]["baseUrl"], "media_image", binary_id, filename), 
+						headers={"Authorization": data["COUCHDB_CONFIG"]["authStr"]})
+					binary_result.append(response)
+	else:
+		data = response.json()
+		if data.get("_attachments") is not None:
+			for attachment in data["_attachments"]:
+				for filename in attachment.keys():
+					response = requests.get(
+						"{}/{}/{}/{}".format(data["COUCHDB_CONFIG"]["baseUrl"], "media_video", binary_id, filename), 
+						headers={"Authorization": data["COUCHDB_CONFIG"]["authStr"]})
+					binary_result.append(response)
+	return binary_result
 	
-	def fetch_binary_by_id(binary_id):
-		pass
 
 
 ## Action response related
@@ -68,7 +94,7 @@ def get_data(req_data):
 	response = requests.get(
 		data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}".format(dbName, offset, length), 
 		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
-	return response
+	return response.json()
 	
 	
 def get_schema(req_data):
@@ -86,7 +112,8 @@ def get_ui_details(req_data):
 def send_binary_to_socket(req_data):
 	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))
 	for binary_id in req_data["binary_list"]:
-		ws.send_binary(fetch_binary_by_id(binary_id))
+		for binary in fetch_binary_by_id(binary_id):
+		ws.send_binary(binary)
 	ws.close()
 	return {"status": "ok"}
 
