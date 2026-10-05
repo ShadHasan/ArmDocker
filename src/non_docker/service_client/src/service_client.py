@@ -69,11 +69,11 @@ def get_render(req_data):
 		# Load the JSON data into a Python object
 		data = json.load(file)
 	render = ""
-	with open(data["pages"][req_data["render"]]["render"], "r") as f:
+	with open(data["pages"][req_data["context_data"]["render"]]["render"], "r") as f:
 		render = f.read()
 	
 	script = ""
-	with open(data["pages"][req_data["render"]]["script"], "r") as f:
+	with open(data["pages"][req_data["context_data"]["render"]]["script"], "r") as f:
 		script = f.read()
 		
 	return {"HTML": render, "SCRIPT": script}
