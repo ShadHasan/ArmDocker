@@ -25,7 +25,26 @@ var ROWS_PRODUCTS = []
  * ============================================================================
  */
 function convertRawToProductComptible(data) {
-	return products;
+	const docs = data.rows
+            .map(row => row.doc)
+            .filter(doc => !doc._id.startsWith('_design/'));
+    if (docs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No inventory records found.</td></tr>';
+        } else {
+            docs.forEach(doc => {
+            	ROWS_PRODUCTS.push({
+            		"id": doc._id,
+			        "name": doc.name || '',
+			        "description": doc.description,
+			        "basePrice": doc.costPrice,
+			        "salePrice": doc.sellingPrice,
+			        "category": doc.category || '',
+			        "specs": doc.quantity || 0,
+			        "images": doc.images
+            	});
+            });
+        }
+	console.log("Product Data Load Received");
 }
 
 function globalTriggerAction(action, data) {
@@ -36,10 +55,13 @@ function globalTriggerAction(action, data) {
 function receiveGlobalActionResponse(response) {
 	 switch(response.action) {
 		case "ui_details":
+			break;
 		case "dataType":
+			break;
 		case "binary_data":
+			break;
 		case "data":
-			response.result;
+			processResponseData(response);
 			break;
 		case "render":
 			document.getElementById("view-home").innerHTML = response.result.HTML;
@@ -49,6 +71,14 @@ function receiveGlobalActionResponse(response) {
 			break;
 	}
  }
+ 
+function processResponseData(response) {
+	switch(response.context_data.type) {
+		case "inventory":
+			convertRawToProductComptible(response.result);
+			break;
+	}
+}
  
 function fetchRowsProducts() {
 	globalTriggerAction("data", {"type": "inventory", "offset": 0, "length": 9})
@@ -116,7 +146,7 @@ function filterAndRenderProductGrid(pageIdx, queryText, selectedCats) {
         card.onmouseout = () => { card.style.boxShadow = "none"; };
         
         card.innerHTML = `
-            <div style="width: 100%; height: 120px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 10px; color: #666;">${item.images[0]}</div>
+            <img src="${item.images[0]}" style="width: 100%; height: 120px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-bottom: 10px; color: #666;">
             <h4 style="margin: 5px 0; font-size: 16px;">${item.name}</h4>
             <p style="font-size: 12px; color: #777; flex-grow: 1; margin: 5px 0;">${item.description.substring(0, 60)}...</p>
             <div style="margin-top: 10px;">
@@ -198,13 +228,14 @@ function updateSliderVisualAssets(productObj, targetedImageIndex) {
     
     APP_STATE.currentSliderIndex = targetedImageIndex;
     
-    document.getElementById("slider-main-image-placeholder").innerText = productObj.images[targetedImageIndex];
+    document.getElementById("slider-main-image-placeholder").src = productObj.images[targetedImageIndex];
     
     const thumbsContainer = document.getElementById("slider-thumbnails-container");
     thumbsContainer.innerHTML = "";
     
     productObj.images.forEach((img, idx) => {
-        const thumb = document.createElement("div");
+        const thumb = document.createElement("img");
+        thumb.src = img;
         const isActive = idx === targetedImageIndex;
         thumb.style.cssText = `width: 40px; height: 40px; background: #eee; font-size: 8px; border: ${isActive ? '2px solid #007aff' : '1px solid #ccc'}; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; font-weight: bold;`;
         thumb.innerText = `Var ${idx + 1}`;
@@ -603,3 +634,7 @@ function eventEnLoad() {
 
     logActivityMetric("SYSTEM_READY", "All explicit event binding arrays mapped securely. Application context operational.");
 }
+
+eventEnLoad();
+
+globalTriggerAction("data", {"type": "inventory", "offset": 0, "length": 9});

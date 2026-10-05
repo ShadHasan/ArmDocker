@@ -84,7 +84,7 @@
                 <!-- Left Slider Compartment -->
                 <div style="flex: 1; min-width: 300px; text-align: center;">
                     <div style="width: 100%; height: 300px; background: #f9f9f9; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-bottom: 10px;">
-                        <span id="slider-main-image-placeholder">Image Variant Preview</span>
+                        <img id="slider-main-image-placeholder" style="width: 95%; height: 95%;">
                     </div>
                     <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                         <button id="slider-btn-left" style="padding: 5px 10px; cursor: pointer;">&lt;</button>
