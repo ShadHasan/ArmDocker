@@ -463,9 +463,8 @@ function simulateAreaPinValidationAsync(enteredPinCode) {
  * SECTION 3: SYSTEM INITIALIZATION & GLOBAL EVENT LISTENERS BINDING PATTERNS
  * ============================================================================
  */
-
-document.addEventListener("DOMContentLoaded", () => {
-    
+function eventEnLoad() {
+	    
     document.getElementById("nav-home").addEventListener("click", () => {
         switchActiveViewport("view-home");
     });
@@ -603,4 +602,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     logActivityMetric("SYSTEM_READY", "All explicit event binding arrays mapped securely. Application context operational.");
-});
+}

@@ -153,9 +153,9 @@ def ws_send_json(ws, msg):
 async def exec_run(argument):
 	await asyncio.sleep(1)
 	logger.debug("Executing service client request, {}".format(argument))
-	if directive == "request_service_client":
+	if argument["directive"] == "request_service_client":
 		argument["directive"] = "service_client_reply"
-	elif directive == "sc_request_service_client":
+	elif argument["directive"] == "sc_request_service_client":
 		argument["directive"] = "sc_service_client_reply"
 	argument["result"] = process_action(argument)
 	return argument
