@@ -1,0 +1,4 @@
+/ArmDocker/src/non_docker/service_client/service_client.service
+*/*/service_client.service
+src/non_docker/service_client/service_client.service
+*.service
