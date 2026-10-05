@@ -1,0 +1,6 @@
+curl http://127.0.0.1:5984/_all_dbs -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+
+curl http://127.0.0.1:5984/inventory/_all_docs?include_docs=true -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+
+curl -X GET "http://127.0.0.1:5984/inventory/_all_docs?skip=0&limit=1&include_docs=true" -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+

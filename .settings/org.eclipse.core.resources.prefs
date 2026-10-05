@@ -1,6 +1,7 @@
 eclipse.preferences.version=1
 encoding//src/Qwen3.5_4b_RKLLM/context_conversation_tested.txt=UTF-8
 encoding//src/non_docker/service_client/src/admin-ui/media.html=UTF-8
+encoding//src/non_docker/service_client/src/ui/index.render=UTF-8
 encoding//src/non_docker/service_client/src/ui/orig/checkout.html=UTF-8
 encoding//src/non_docker/service_client/src/ui/orig/history.html=UTF-8
 encoding//src/non_docker/service_client/src/ui/orig/index.html=UTF-8

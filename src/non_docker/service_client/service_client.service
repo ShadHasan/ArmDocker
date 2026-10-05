@@ -17,6 +17,7 @@ RestartSec=5
 Environment="PYTHONUNBUFFERED=1"
 Environment="SIGNALSERVER="
 Environment="LOGPATH=/var/log/service_client.log"
+Environment="APP_PATH="
 
 [Install]
 WantedBy=multi-user.target

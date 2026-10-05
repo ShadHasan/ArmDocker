@@ -19,8 +19,7 @@ logging.basicConfig(
 	]
 )
 
-
-def fetch_binary_by_id(binary_id):
+def fetch_binary_by_id(data, binary_id):
 	binary_result = []
 	response = requests.get(
 		"{}/{}/{}".format(data["COUCHDB_CONFIG"]["baseUrl"], "media_video", binary_id), 
@@ -66,7 +65,7 @@ def format_media(pc_uuid, media_type, id, binary):
 
 def get_render(req_data):
 	data = {}
-	with open("./ui/config.json", 'r') as file:
+	with open(APP_PATH+"/ui/config.json", 'r') as file:
 		# Load the JSON data into a Python object
 		data = json.load(file)
 	render = ""
@@ -77,43 +76,47 @@ def get_render(req_data):
 	with open(data["pages"][req_data["render"]]["script"], "r") as f:
 		script = f.read()
 		
-	return {"render": render, "script": script}
+	return {"HTML": render, "SCRIPT": script}
 
 
 # for time dbName is equivalent of data type
 def get_data(req_data):
-	product_list = req_data["product_list"]
-	offset = req_data["offset"] if req_data.get("offset") else 0
-	length = req_data["length"] if req_data.get("length") else 9
-	dbName = req_data["type"]
+	offset = req_data["context_data"]["offset"] if req_data["context_data"].get("offset") else 0
+	length = req_data["context_data"]["length"] if req_data["context_data"].get("length") else 9
+	dbName = req_data["context_data"]["type"]
 	data = {}
-	with open("./ui/config.json", 'r') as file:
+	with open(APP_PATH+"/ui/config.json", 'r') as file:
 		# Load the JSON data into a Python object
 		data = json.load(file)
 	
 	response = requests.get(
-		data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}".format(dbName, offset, length), 
+		data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}&include_docs=true".format(dbName, offset, length), 
 		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
 	return response.json()
 	
 	
 def get_schema(req_data):
+	context_data = data["context_data"]
 	return {}
 	
 
 def get_ui_details(req_data):
 	data = {}
-	with open("./ui/config.json", 'r') as file:
+	with open(APP_PATH+"/ui/config.json", 'r') as file:
 		# Load the JSON data into a Python object
 		data = json.load(file)
 	return data["ui_details"]
 	
 
 def send_binary_to_socket(req_data):
-	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "/ws/binary"))
+	ws = create_connection("{}/{}".format(os.environ["SIGNALSERVER"], "ws/binary"))
+	data = {}
+	with open(APP_PATH+"/ui/config.json", 'r') as file:
+		# Load the JSON data into a Python object
+		data = json.load(file)
 	for binary_id in req_data["binary_list"]:
 		for binary in fetch_binary_by_id(binary_id):
-		ws.send_binary(binary)
+			ws.send_binary(data, binary)
 	ws.close()
 	return {"status": "ok"}
 
@@ -150,7 +153,10 @@ def ws_send_json(ws, msg):
 async def exec_run(argument):
 	await asyncio.sleep(1)
 	logger.debug("Executing service client request, {}".format(argument))
-	argument["directive"] = "service_client_reply"
+	if directive == "request_service_client":
+		argument["directive"] = "service_client_reply"
+	elif directive == "sc_request_service_client":
+		argument["directive"] = "sc_service_client_reply"
 	argument["result"] = process_action(argument)
 	return argument
 
@@ -159,7 +165,7 @@ def process_and_send(ws, message):
 	directive = message.get("directive")
 	signal_response = message.get("signal_response")
 	logger.debug("Signal directive/response {} {}".format(directive, signal_response))
-	if directive == "request_service_client":
+	if directive == "request_service_client" or directive == "sc_request_service_client":
 		result = asyncio.run(exec_run(message))
 		ws_send_json(ws, result)
 		logger.info("Successfully sent")
@@ -193,10 +199,12 @@ def on_open(ws):
 	
 
 if __name__ == "__main__":
+	
 	logger = logging.getLogger(__name__)
 	logger.info("This goes to both the file and console")
+	APP_PATH = os.environ["APP_PATH"]
 	# Target URL
-	uri = "{}/{}".format(os.environ["SIGNALSERVER"], "/ws/signal")
+	uri = "{}/{}".format(os.environ["SIGNALSERVER"], "ws/signal")
 	
 	# my_context = ssl.create_default_context()
 	# my_context.load_verify_locations('my_extra_CAs.cer')
