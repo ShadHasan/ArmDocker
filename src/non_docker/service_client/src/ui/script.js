@@ -19,6 +19,8 @@ const APP_STATE = {
 
 var ROWS_PRODUCTS = []
 
+var aoa = ["request", "status", "cancel"]
+
 /**
  * ============================================================================
  * SECTION 1.1: Global Signal Abstract Interaction
@@ -294,7 +296,7 @@ function renderBasketCheckoutTable() {
     }
     
     basketKeys.forEach(pIdKey => {
-        const pId = parseInt(pIdKey);
+        const pId = pIdKey;
         const product = ROWS_PRODUCTS.find(p => p.id === pId);
         if (!product) return;
         
