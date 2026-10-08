@@ -88,9 +88,35 @@ def get_data(req_data):
 	with open(APP_PATH+"/ui/config.json", 'r') as file:
 		# Load the JSON data into a Python object
 		data = json.load(file)
-	
-	response = requests.get(
-		data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}&include_docs=true".format(dbName, offset, length), 
+	# default_get_url
+	url = data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_all_docs?skip={}&limit={}&include_docs=true".format(dbName, offset, length)
+	if dbName == "order":
+		aoa = req_data["context_data"]["aoa"]
+		# This will create order
+		if aoa == "request":
+			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}".format(dbName), 
+				json=req_data["context_data"]["body"],
+				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
+			)
+		# This will cancel the order
+		elif aoa == "cancel":
+			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/req_data["context_data"]["id"],
+				json={
+					"status": "cancel_request"
+				},
+				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
+			)
+		elif aoa == "status":
+			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_find".format(dbName), 
+				json={
+					"selector": {
+						"altname": req_data["altname"]
+					}
+				},
+				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
+			)
+		
+	response = requests.get(url, 
 		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
 	return response.json()
 	

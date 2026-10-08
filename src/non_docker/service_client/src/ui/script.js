@@ -12,6 +12,7 @@ const APP_STATE = {
     selectedCategories: [],
     basket: {}, // Key: Product ID, Value: Quantity
     currentSliderIndex: 0,
+    allMyOrders:[],
     activityLog: [
         { time: "2026-10-03 10:00", event: "SYSTEM_INITIALIZED", message: "Whiteboard empty canvas rendered successfully." }
     ]
@@ -78,6 +79,13 @@ function processResponseData(response) {
 	switch(response.context_data.type) {
 		case "inventory":
 			convertRawToProductComptible(response.result);
+			break;
+		case "order": 
+			switch (response.context_data.aoa) {
+				case "request":
+					postOrderProcessPipeline(response.result);
+				break;
+			}
 			break;
 	}
 }
@@ -344,6 +352,11 @@ function bindCheckoutRowListeners() {
     });
 }
 
+// Generate Unique Product ID
+function generateUniqueId() {
+    return 'ORD-' + Date.now() + '-' + Math.floor(1000 + Math.random() * 9000);
+}
+
 function executeOrderPlacementPipeline() {
     const basketKeys = Object.keys(APP_STATE.basket);
     if (basketKeys.length === 0) {
@@ -365,14 +378,19 @@ function executeOrderPlacementPipeline() {
     const timestampNow = new Date().toISOString().replace('T', ' ').substring(0, 16);
     
     const structuredOrderPayload = {
-        id: uniqueGeneratedOrderId,
-        status: "Processing",
+        status: "request",
         items: compiledItems,
         total: parseFloat(calculationAggregateSum.toFixed(2)),
         date: timestampNow
     };
+    globalTriggerAction("data", {"type": "order", "aoa": "request", "body": structuredOrderPayload});
+    logActivityMetric("ORDER_PLACEMENT_REQUEST", `Order request has been placed at ${timestampNow}`);
     
-    APP_STATE.mockOrders.unshift(structuredOrderPayload);
+}
+
+function postOrderProcessPipeline(structuredOrderPayload)
+{
+	APP_STATE.allMyOrders.unshift(structuredOrderPayload);
     APP_STATE.basket = {};
     recalculateGlobalCartMetrics();
     
@@ -383,7 +401,7 @@ function executeOrderPlacementPipeline() {
 }
 
 function populateOrderDetailsInspector(orderIdString) {
-    const matchingOrder = APP_STATE.mockOrders.find(o => o.id === orderIdString);
+    const matchingOrder = APP_STATE.allMyOrders.find(o => o._id === orderIdString);
     if (!matchingOrder) return;
     
     APP_STATE.selectedOrderId = orderIdString;
@@ -429,19 +447,21 @@ function renderOrderListCollectionGrid() {
     
     targetContainer.innerHTML = "";
     
-    if(APP_STATE.mockOrders.length === 0) {
+    if(APP_STATE.allMyOrders.length === 0) {
         targetContainer.innerHTML = `<div style="padding: 20px; text-align: center; color: #999;">Historical ledger array holds no tracked instances.</div>`;
         return;
     }
     
-    APP_STATE.mockOrders.forEach(ord => {
+    APP_STATE.allMyOrders.forEach(ord => {
         const row = document.createElement("div");
         row.style.cssText = "display: flex; padding: 12px; border-bottom: 1px solid #e0e0e0; cursor: pointer; align-items: center; transition: background 0.2s;";
-        row.setAttribute("data-order-target-id", ord.id);
+        row.setAttribute("data-order-target-id", ord._id);
         row.onmouseover = () => { row.style.backgroundColor = "#fafafa"; };
         row.onmouseout = () => { row.style.backgroundColor = "transparent"; };
         
         let colorProfile = "#666";
+        if (ord.status === "request") colorProfile = "#4341D9";
+        if (ord.status === "cancelled") colorProfile = "#ff2c2c";
         if (ord.status === "Processing" || ord.status === "Accepted") colorProfile = "#007aff";
         if (ord.status === "shipped" || ord.status === "Completed") colorProfile = "#34c759";
         
@@ -451,7 +471,7 @@ function renderOrderListCollectionGrid() {
         `;
         
         row.addEventListener("click", () => {
-            populateOrderDetailsInspector(ord.id);
+            populateOrderDetailsInspector(ord._id);
         });
         
         targetContainer.appendChild(row);
@@ -640,3 +660,4 @@ function eventEnLoad() {
 eventEnLoad();
 
 globalTriggerAction("data", {"type": "inventory", "offset": 0, "length": 9});
+globalTriggerAction("data", {"type": "order", "aoa": "status","offset": 0, "length": 9});

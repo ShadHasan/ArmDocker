@@ -4,3 +4,57 @@ curl http://127.0.0.1:5984/inventory/_all_docs?include_docs=true -H "Authorizati
 
 curl -X GET "http://127.0.0.1:5984/inventory/_all_docs?skip=0&limit=1&include_docs=true" -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
 
+curl -X PUT "http://127.0.0.1:5984/order" -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+
+# UPDATE
+curl -X PUT http://127.0.0.1:5984/order/<require existing ID> \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Basic YWRtaW46UEFKSUhJTkc=" \
+     -d '{"altname": "Jane_Doe", "status": "shipped", "items": { "PRD-383482-2392": 2, "PRD-3267192-5891": 1 }, "total": 79.97, "date": "2026-09-28 09:11"}'
+
+# CREATE
+curl -X POST http://127.0.0.1:5984/order \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Basic YWRtaW46UEFKSUhJTkc=" \
+     -d '{
+	     	"altname": "Jane_Doe", 
+	     	"status": "shipped", 
+	     	"items": { "PRD-383482-2392": 2, "PRD-3267192-5891": 1 }, 
+	     	"total": 79.97, "date": "2026-09-28 09:11"
+     	}'
+
+Response:
+{"ok":true,"id":"55eeebe6a001d551b993b8b10c000a29","rev":"1-5bf5a7e8cc75c31b5574a5b5619b08aa"}
+
+# GET ID
+curl -X GET http://127.0.0.1:5984/order/55eeebe6a001d551b993b8b10c000a29&rev=1-5bf5a7e8cc75c31b5574a5b5619b08aa -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+
+# GET ALL
+curl -X GET http://127.0.0.1:5984/order/_all_docs?include_docs=true -H "Authorization: Basic YWRtaW46UEFKSUhJTkc="
+
+
+# GET by ALTName matching
+
+curl -X POST http://127.0.0.1:5984/order/_find -H "Authorization: Basic YWRtaW46UEFKSUhJTkc=" \
+	-H "Content-Type: application/json" \
+	-d '{
+		"selector": {
+         "altname": "Jane_Doe"
+       }
+	}'
+	
+# `altname` indexing for `order` database with indexname `index-order-altname`
+
+curl -X POST http://127.0.0.1:5984/order/_index \
+     -H "Content-Type: application/json" \
+     -H "Authorization: Basic YWRtaW46UEFKSUhJTkc=" \
+     -d '{
+       "index": {
+         "fields": ["altname"]
+       },
+       "name": "index-order-altname",
+       "type": "json"
+     }'
+	
+
+
