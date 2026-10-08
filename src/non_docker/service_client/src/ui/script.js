@@ -32,7 +32,7 @@ function convertRawToProductComptible(data) {
             .map(row => row.doc)
             .filter(doc => !doc._id.startsWith('_design/'));
     if (docs.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No inventory records found.</td></tr>';
+            console.log("No Inventory found");
         } else {
             docs.forEach(doc => {
             	ROWS_PRODUCTS.push({
@@ -48,6 +48,31 @@ function convertRawToProductComptible(data) {
             });
         }
 	console.log("Product Data Load Received");
+}
+
+function covertRawOrderCompatible(data) {
+	console.log("Received order list")
+	if (!data.rows) {
+			console.log("No Inventory found");
+			return;
+		}
+	const docs = data.rows
+		.map(row => row.doc)
+        .filter(doc => !doc._id.startsWith('_design/'));
+    if (docs.length === 0) {
+            return;
+        } else {
+            docs.forEach(doc => {
+            	APP_STATE.allMyOrders.push({
+            		"_id": doc.id,
+			        "altname": doc.altname, 
+			     	"status": doc.status,
+			     	"items": doc.items,
+			     	"total": doc.total,
+			     	"date": doc.date
+            	});
+            });
+        }
 }
 
 function globalTriggerAction(action, data) {
@@ -83,8 +108,11 @@ function processResponseData(response) {
 		case "order": 
 			switch (response.context_data.aoa) {
 				case "request":
-					postOrderProcessPipeline(response.result);
-				break;
+					postOrderProcessPipeline(response.result, response.context_data.body);
+					break;
+				case "status":
+					covertRawOrderCompatible(response.result);
+					break;
 			}
 			break;
 	}
@@ -388,15 +416,16 @@ function executeOrderPlacementPipeline() {
     
 }
 
-function postOrderProcessPipeline(structuredOrderPayload)
+function postOrderProcessPipeline(result, structuredOrderPayload)
 {
+	structuredOrderPayload["_id"] = result.id;
 	APP_STATE.allMyOrders.unshift(structuredOrderPayload);
     APP_STATE.basket = {};
     recalculateGlobalCartMetrics();
     
-    logActivityMetric("ORDER_PLACEMENT_SUCCESS", `Committed checkout system operations payload safely. Order Record Matrix Key: ${uniqueGeneratedOrderId} at ${timestampNow}`);
+    logActivityMetric("ORDER_PLACEMENT_SUCCESS", `Committed checkout system operations payload safely. Order Record Matrix Key: ${result.id} at ${structuredOrderPayload.date}`);
     
-    document.getElementById("placed-order-id-display").innerText = uniqueGeneratedOrderId;
+    document.getElementById("placed-order-id-display").innerText = result.id;
     switchActiveViewport("view-order-placed");
 }
 
@@ -405,8 +434,8 @@ function populateOrderDetailsInspector(orderIdString) {
     if (!matchingOrder) return;
     
     APP_STATE.selectedOrderId = orderIdString;
-    
-    document.getElementById("order-details-id").innerText = matchingOrder.id;
+    console.log(matchingOrder);
+    document.getElementById("order-details-id").innerText = matchingOrder._id;
     document.getElementById("order-details-status").innerText = matchingOrder.status;
     document.getElementById("order-details-subtotal").innerText = `$${matchingOrder.total.toFixed(2)}`;
     document.getElementById("order-details-total").innerText = `$${matchingOrder.total.toFixed(2)}`;
@@ -425,7 +454,7 @@ function populateOrderDetailsInspector(orderIdString) {
     itemsContainer.innerHTML = "";
     
     Object.keys(matchingOrder.items).forEach(pIdKey => {
-        const pId = parseInt(pIdKey);
+        const pId = pIdKey;
         const qty = matchingOrder.items[pIdKey];
         const prod = ROWS_PRODUCTS.find(p => p.id === pId);
         
@@ -466,7 +495,7 @@ function renderOrderListCollectionGrid() {
         if (ord.status === "shipped" || ord.status === "Completed") colorProfile = "#34c759";
         
         row.innerHTML = `
-            <div style="flex: 2; font-family: monospace; font-size: 15px; font-weight: bold; color: #111;">${ord.id}</div>
+            <div style="flex: 2; font-family: monospace; font-size: 15px; font-weight: bold; color: #111;">${ord._id}</div>
             <div style="flex: 1;"><span style="background: ${colorProfile}15; color: ${colorProfile}; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">${ord.status}</span></div>
         `;
         

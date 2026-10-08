@@ -94,18 +94,21 @@ def get_data(req_data):
 		aoa = req_data["context_data"]["aoa"]
 		# This will create order
 		if aoa == "request":
+			req_data["context_data"]["body"]["altname"] = req_data["altname"]
 			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}".format(dbName), 
 				json=req_data["context_data"]["body"],
 				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
 			)
+			return response.json()
 		# This will cancel the order
 		elif aoa == "cancel":
-			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/req_data["context_data"]["id"],
+			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/{}".format(dbName, req_data["context_data"]["_id"]),
 				json={
 					"status": "cancel_request"
 				},
 				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
 			)
+			return response.json()
 		elif aoa == "status":
 			response = requests.post(data["COUCHDB_CONFIG"]["baseUrl"]+"/{}/_find".format(dbName), 
 				json={
@@ -115,7 +118,7 @@ def get_data(req_data):
 				},
 				headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]}
 			)
-		
+			return response.json()
 	response = requests.get(url, 
 		headers={"Accept": "application/json", "Authorization": data["COUCHDB_CONFIG"]["authStr"]})
 	return response.json()
