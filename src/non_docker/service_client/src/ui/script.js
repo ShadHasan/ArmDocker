@@ -51,20 +51,18 @@ function convertRawToProductComptible(data) {
 }
 
 function covertRawOrderCompatible(data) {
-	console.log("Received order list")
-	if (!data.rows) {
-			console.log("No Inventory found");
+	console.log("Received order list", data)
+	if (typeof data.docs == "undefined") {
+			console.log("No Order found");
 			return;
 		}
-	const docs = data.rows
-		.map(row => row.doc)
-        .filter(doc => !doc._id.startsWith('_design/'));
+	const docs = data.docs;
     if (docs.length === 0) {
             return;
         } else {
             docs.forEach(doc => {
             	APP_STATE.allMyOrders.push({
-            		"_id": doc.id,
+            		"_id": doc._id,
 			        "altname": doc.altname, 
 			     	"status": doc.status,
 			     	"items": doc.items,
