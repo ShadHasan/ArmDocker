@@ -9,8 +9,6 @@
 			"render": "ui/index.render",
 			"script": "ui/script.js"
 		}
-	},
-	"COUCHDB_CONFIG": {
-	    
+
 	}
 }
